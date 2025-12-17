@@ -15,8 +15,8 @@ const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
   };
 
   return (
-    <div className="group relative bg-white border border-zinc-200 rounded-xl p-8 hover:border-indigo-400/50 transition-all hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col items-center justify-between h-64 overflow-hidden">
-      <div className="flex-1 flex items-center justify-center scale-125 group-hover:scale-150 transition-transform duration-500">
+    <article className="group relative bg-white border border-zinc-200 rounded-xl p-8 hover:border-indigo-400/50 transition-all hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col items-center justify-between h-64 overflow-hidden">
+      <div className="flex-1 flex items-center justify-center scale-125 group-hover:scale-150 transition-transform duration-500" aria-hidden="true">
         <LoaderDisplay variant={loader.variant} size="lg" className="text-zinc-900" />
       </div>
       
@@ -29,6 +29,7 @@ const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
           <button 
             onClick={copyCode}
             className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-zinc-50 rounded-md border border-zinc-200 active:scale-95"
+            aria-label={`Copy code for ${loader.name}`}
             title="Copy Code"
           >
             {copied ? (
@@ -43,7 +44,7 @@ const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 
@@ -61,25 +62,26 @@ const LoaderGrid: React.FC = () => {
     <section id="explore" className="py-20 max-w-7xl mx-auto px-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-900">Loader Gallery</h2>
-          <p className="text-zinc-500 mt-2">Browse our collection of 20+ performant React loaders.</p>
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-900">Browse Loader Library</h2>
+          <p className="text-zinc-500 mt-2">Explore 20+ performant React spinners and animated loading states.</p>
         </div>
         
         <div className="flex flex-wrap gap-4 items-center">
           <div className="relative">
              <input 
                type="text" 
-               placeholder="Search loaders..."
+               placeholder="Search shadcn loaders..."
                value={search}
                onChange={(e) => setSearch(e.target.value)}
                className="bg-zinc-50 border border-zinc-200 rounded-lg px-10 py-2 text-sm text-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 w-64 placeholder:text-zinc-400"
+               aria-label="Search loaders"
              />
              <svg className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
              </svg>
           </div>
           
-          <div className="flex bg-zinc-100/50 border border-zinc-200 rounded-lg p-1">
+          <div className="flex bg-zinc-100/50 border border-zinc-200 rounded-lg p-1" role="group" aria-label="Filter loaders by category">
             {['all', 'simple', 'complex', 'abstract', 'utility'].map((cat) => (
               <button
                 key={cat}
@@ -102,7 +104,7 @@ const LoaderGrid: React.FC = () => {
           ))
         ) : (
           <div className="col-span-full py-20 text-center text-zinc-400 bg-zinc-50 border border-dashed border-zinc-200 rounded-xl">
-            No loaders found matching your search.
+            No shadcn loaders found matching your search.
           </div>
         )}
       </div>
