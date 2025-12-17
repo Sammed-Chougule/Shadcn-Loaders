@@ -1,8 +1,8 @@
 
 import React from 'react';
-import LoaderGrid from './components/LoaderGrid';
-import InstallationSection from './components/InstallationSection';
-import { LoaderDisplay } from './components/LoaderDisplay';
+import LoaderGrid from './components/LoaderGrid.tsx';
+import InstallationSection from './components/InstallationSection.tsx';
+import { LoaderDisplay } from './components/LoaderDisplay.tsx';
 
 const App: React.FC = () => {
   const scrollToSection = (id: string) => {

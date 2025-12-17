@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { LOADERS } from '../constants';
-import { LoaderDisplay } from './LoaderDisplay';
-import { LoaderItem } from '../types';
+import { LOADERS } from '../constants.tsx';
+import { LoaderDisplay } from './LoaderDisplay.tsx';
+import { LoaderItem } from '../types.ts';
 
 const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
   const [copied, setCopied] = useState(false);
