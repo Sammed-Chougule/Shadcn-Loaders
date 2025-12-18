@@ -148,7 +148,10 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-zinc-100 text-center">
+        <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-zinc-100 text-center space-y-3">
+          <p className="text-zinc-600 text-sm font-medium">
+            Created by <span className="text-zinc-900 font-bold">Sammed-Chougule</span> — Building beautiful web experiences with precision.
+          </p>
           <p className="text-zinc-400 text-xs">
             © {new Date().getFullYear()} Shadcn Loaders. Premium UI components for React.
           </p>
