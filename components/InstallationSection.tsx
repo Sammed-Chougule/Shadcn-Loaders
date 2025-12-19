@@ -20,16 +20,16 @@ const InstallationSection: React.FC = () => {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-md">
-        <div className="flex border-b border-zinc-200 bg-zinc-50/50">
+      <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-md transition-colors">
+        <div className="flex border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50">
           {(['npm', 'yarn', 'pnpm', 'bun'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-6 py-3 text-sm font-medium transition-colors ${
                 activeTab === tab 
-                  ? 'text-zinc-900 border-b-2 border-zinc-900 bg-white' 
-                  : 'text-zinc-500 hover:text-zinc-700'
+                  ? 'text-zinc-900 dark:text-zinc-50 border-b-2 border-zinc-900 dark:border-zinc-50 bg-white dark:bg-zinc-900' 
+                  : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200'
               }`}
             >
               {tab}
@@ -57,7 +57,7 @@ const InstallationSection: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className="mt-6 flex items-center justify-center gap-2 text-xs text-zinc-400 bg-zinc-100/50 py-2 rounded-full border border-zinc-200/50 max-w-sm mx-auto">
+      <div className="mt-6 flex items-center justify-center gap-2 text-xs text-zinc-400 dark:text-zinc-500 bg-zinc-100/50 dark:bg-zinc-900/30 py-2 rounded-full border border-zinc-200/50 dark:border-zinc-800 max-w-sm mx-auto transition-colors">
         <svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
