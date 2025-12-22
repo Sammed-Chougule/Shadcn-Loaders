@@ -58,7 +58,7 @@ const InstallationSection: React.FC = () => {
         </div>
       </div>
       <div className="mt-6 flex items-center justify-center gap-2 text-xs text-zinc-400 dark:text-zinc-500 bg-zinc-100/50 dark:bg-zinc-900/30 py-2 rounded-full border border-zinc-200/50 dark:border-zinc-800 max-w-sm mx-auto transition-colors">
-        <svg className="w-4 h-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-4 h-4 text-zinc-900 dark:text-zinc-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <span>This adds the component to <code>components/ui</code> automatically.</span>

@@ -15,7 +15,7 @@ const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
   };
 
   return (
-    <article className="group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 hover:border-indigo-400/50 dark:hover:border-indigo-400/50 transition-all hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col items-center justify-between h-64 overflow-hidden">
+    <article className="group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 hover:border-black dark:hover:border-white transition-all hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col items-center justify-between h-64 overflow-hidden">
       <div className="flex-1 flex items-center justify-center scale-125 group-hover:scale-150 transition-transform duration-500" aria-hidden="true">
         <LoaderDisplay variant={loader.variant} size="lg" className="text-zinc-900 dark:text-zinc-50" />
       </div>
@@ -23,7 +23,7 @@ const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
       <div className="w-full mt-4">
         <div className="flex items-center justify-between">
           <div className="flex-1 min-w-0 pr-2">
-            <h3 className="font-semibold text-zinc-900 dark:text-zinc-50 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">{loader.name}</h3>
+            <h3 className="font-semibold text-zinc-900 dark:text-zinc-50 group-hover:text-black dark:group-hover:text-white transition-colors truncate">{loader.name}</h3>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{loader.description}</p>
           </div>
           <button 
@@ -73,7 +73,7 @@ const LoaderGrid: React.FC = () => {
                placeholder="Search shadcn loaders..."
                value={search}
                onChange={(e) => setSearch(e.target.value)}
-               className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-10 py-2 text-sm text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 w-full sm:w-64 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 transition-all"
+               className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-10 py-2 text-sm text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500/20 w-full sm:w-64 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 transition-all"
                aria-label="Search loaders"
              />
              <svg className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
