@@ -71,6 +71,20 @@ const App: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-3">
+          {/* Buy Me a Coffee Button */}
+          <a 
+            href="https://www.buymeacoffee.com/sammedchougule" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:opacity-80 transition-opacity"
+          >
+            <img 
+              src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" 
+              alt="Buy Me A Coffee" 
+              style={{ height: '24px', width: 'auto' }} 
+            />
+          </a>
+
           {/* GitHub Button with Stars */}
           <a 
             href="https://github.com/Sammed-Chougule/Shadcn-Loaders"
