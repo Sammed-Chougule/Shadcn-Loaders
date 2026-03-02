@@ -252,6 +252,40 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
         </div>
       );
 
+
+    case 'hex-spin':
+      return (
+        <div className={`${containerSize} ${primaryColorClass} flex items-center justify-center ${className}`}>
+          <svg viewBox="0 0 100 100" className="w-full h-full animate-[spin_1.6s_linear_infinite]" fill="none" stroke="currentColor" strokeWidth="4">
+            <polygon points="50,10 80,30 80,70 50,90 20,70 20,30" className="stroke-current" />
+          </svg>
+        </div>
+      );
+
+    case 'concentric-rings':
+      return (
+        <div className={`relative ${containerSize} flex items-center justify-center ${className}`}>
+          <div className="absolute inset-0 rounded-full border-2 border-zinc-200 dark:border-zinc-800 animate-ping" />
+          <div className="absolute inset-2 rounded-full border-2 border-zinc-300 dark:border-zinc-700 animate-ping delay-200" />
+          <div className="absolute inset-4 rounded-full border-2 border-zinc-400 dark:border-zinc-600 animate-pulse delay-400" />
+        </div>
+      );
+
+    case 'dots-rotate':
+      return (
+        <div className={`relative ${containerSize} ${className}`}>
+          <div className="absolute inset-0 flex items-center justify-center animate-[spin_1.2s_linear_infinite]">
+            {[0,1,2].map((i) => (
+              <div
+                key={i}
+                className="absolute w-2 h-2 bg-zinc-900 dark:bg-zinc-50 rounded-full"
+                style={{ transform: `rotate(${i * 120}deg) translateY(-40%)` }}
+              />
+            ))}
+          </div>
+        </div>
+      );
+
     default:
       return null;
   }

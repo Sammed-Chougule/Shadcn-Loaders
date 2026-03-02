@@ -24,4 +24,7 @@ export const LOADERS: LoaderItem[] = [
   { id: '20', name: 'Bio DNA', variant: 'loader-dna', description: 'Intertwined helix rotation.', category: 'complex' },
   { id: '21', name: 'Digital Rain', variant: 'matrix', description: 'Falling data block animation.', category: 'complex' },
   { id: '22', name: 'Floating Bubbles', variant: 'floating-bubble', description: 'Randomly ascending air bubbles.', category: 'abstract' },
+  { id: '23', name: 'Hex Spin', variant: 'hex-spin', description: 'Rotating hexagon spinner.', category: 'abstract' },
+  { id: '24', name: 'Concentric Rings', variant: 'concentric-rings', description: 'Expanding concentric ring pulses.', category: 'abstract' },
+  { id: '25', name: 'Orbiting Dots', variant: 'dots-rotate', description: 'Dots rotating in an orbit.', category: 'simple' },
 ];

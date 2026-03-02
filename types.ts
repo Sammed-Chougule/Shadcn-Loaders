@@ -1,5 +1,5 @@
 
-export type LoaderVariant = 
+export type LoaderVariant =
   | 'classic-spinner'
   | 'dots-pulse'
   | 'pulse-ring'
@@ -21,7 +21,10 @@ export type LoaderVariant =
   | 'heartbeat'
   | 'floating-bubble'
   | 'matrix'
-  | 'loader-dna';
+  | 'loader-dna'
+  | 'hex-spin'
+  | 'concentric-rings'
+  | 'dots-rotate';
 
 export interface LoaderItem {
   id: string;
