@@ -1,8 +1,31 @@
 {
-  "name": "shadcn-loaders-library",
-  "private": true,
-  "version": "0.0.0",
+  "name": "shadcn-loaders",
+  "version": "1.0.1",
+  "description": "A collection of modern shadcn-inspired React loaders.",
+  "author": "Sammed-Chougule",
+  "license": "MIT",
+  "homepage": "https://github.com/Sammed-Chougule/Shadcn-Loaders",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sammed-Chougule/Shadcn-Loaders.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Sammed-Chougule/Shadcn-Loaders/issues"
+  },
+  "keywords": [
+    "shadcn",
+    "loader",
+    "react",
+    "tailwindcss",
+    "spinner"
+  ],
   "type": "module",
+  "bin": {
+    "shadcn-loaders": "bin/shadcn-loaders.js"
+  },
+  "files": [
+    "bin"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
