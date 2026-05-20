@@ -27,4 +27,7 @@ export const LOADERS: LoaderItem[] = [
   { id: '23', name: 'Hex Spin', variant: 'hex-spin', description: 'Rotating hexagon spinner.', category: 'abstract' },
   { id: '24', name: 'Concentric Rings', variant: 'concentric-rings', description: 'Expanding concentric ring pulses.', category: 'abstract' },
   { id: '25', name: 'Orbiting Dots', variant: 'dots-rotate', description: 'Dots rotating in an orbit.', category: 'simple' },
+  { id: '26', name: 'Morphing Hexagon', variant: 'morphing-hex', description: 'Shape-shifting hexagon with smooth rotation.', category: 'complex' },
+  { id: '27', name: 'Ripple Pulse', variant: 'ripple-pulse', description: 'Expanding concentric ripples like water.', category: 'abstract' },
+  { id: '28', name: 'Orbiting Spheres', variant: 'orbiting-spheres', description: 'Two dots orbiting with 3D depth effect.', category: 'complex' },
 ];

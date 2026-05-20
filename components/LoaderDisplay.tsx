@@ -286,6 +286,168 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
         </div>
       );
 
+    case 'morphing-hex':
+      return (
+        <div className={`${containerSize} ${className}`}>
+          <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="4">
+            <style>{`
+              @keyframes morphHex {
+                0% { d: path('M50,10 L80,30 L80,70 L50,90 L20,70 L20,30 Z'); transform: rotate(0deg); }
+                25% { d: path('M50,15 L75,35 L75,65 L50,85 L25,65 L25,35 Z'); transform: rotate(90deg); }
+                50% { d: path('M50,10 L80,30 L80,70 L50,90 L20,70 L20,30 Z'); transform: rotate(180deg); }
+                75% { d: path('M50,15 L75,35 L75,65 L50,85 L25,65 L25,35 Z'); transform: rotate(270deg); }
+                100% { d: path('M50,10 L80,30 L80,70 L50,90 L20,70 L20,30 Z'); transform: rotate(360deg); }
+              }
+              .morphing { animation: morphHex 3s ease-in-out infinite; }
+            `}</style>
+            <polygon points="50,10 80,30 80,70 50,90 20,70 20,30" className="morphing stroke-zinc-900 dark:stroke-zinc-50" />
+          </svg>
+        </div>
+      );
+
+    case 'ripple-pulse':
+      return (
+        <div className={`relative ${containerSize} flex items-center justify-center overflow-hidden ${className}`}>
+          <div className={`absolute w-2 h-2 ${primaryBgClass} rounded-full`} />
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="absolute rounded-full border-2 border-zinc-900 dark:border-zinc-50"
+              style={{
+                width: `${12 + i * 8}px`,
+                height: `${12 + i * 8}px`,
+                animation: `ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite`,
+                animationDelay: `${i * 0.4}s`,
+                opacity: 1 - i * 0.3
+              }}
+            />
+          ))}
+        </div>
+      );
+
+    case 'orbiting-spheres':
+      return (
+        <div className={`${containerSize} ${className}`}>
+          <style>{`
+            @keyframes rotate-container {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+            @keyframes orbit-motion {
+              0% {
+                transform: translateX(calc(var(--size) * 0.25)) scale(0.73684);
+                opacity: 0.65;
+              }
+              5% {
+                transform: translateX(calc(var(--size) * 0.235)) scale(0.684208);
+                opacity: 0.58;
+              }
+              10% {
+                transform: translateX(calc(var(--size) * 0.182)) scale(0.631576);
+                opacity: 0.51;
+              }
+              15% {
+                transform: translateX(calc(var(--size) * 0.129)) scale(0.578944);
+                opacity: 0.44;
+              }
+              20% {
+                transform: translateX(calc(var(--size) * 0.076)) scale(0.526312);
+                opacity: 0.37;
+              }
+              25% {
+                transform: translateX(0%) scale(0.47368);
+                opacity: 0.3;
+              }
+              30% {
+                transform: translateX(calc(var(--size) * -0.076)) scale(0.526312);
+                opacity: 0.37;
+              }
+              35% {
+                transform: translateX(calc(var(--size) * -0.129)) scale(0.578944);
+                opacity: 0.44;
+              }
+              40% {
+                transform: translateX(calc(var(--size) * -0.182)) scale(0.631576);
+                opacity: 0.51;
+              }
+              45% {
+                transform: translateX(calc(var(--size) * -0.235)) scale(0.684208);
+                opacity: 0.58;
+              }
+              50% {
+                transform: translateX(calc(var(--size) * -0.25)) scale(0.73684);
+                opacity: 0.65;
+              }
+              55% {
+                transform: translateX(calc(var(--size) * -0.235)) scale(0.789472);
+                opacity: 0.72;
+              }
+              60% {
+                transform: translateX(calc(var(--size) * -0.182)) scale(0.842104);
+                opacity: 0.79;
+              }
+              65% {
+                transform: translateX(calc(var(--size) * -0.129)) scale(0.894736);
+                opacity: 0.86;
+              }
+              70% {
+                transform: translateX(calc(var(--size) * -0.076)) scale(0.947368);
+                opacity: 0.93;
+              }
+              75% {
+                transform: translateX(0%) scale(1);
+                opacity: 1;
+              }
+              80% {
+                transform: translateX(calc(var(--size) * 0.076)) scale(0.947368);
+                opacity: 0.93;
+              }
+              85% {
+                transform: translateX(calc(var(--size) * 0.129)) scale(0.894736);
+                opacity: 0.86;
+              }
+              90% {
+                transform: translateX(calc(var(--size) * 0.182)) scale(0.842104);
+                opacity: 0.79;
+              }
+              95% {
+                transform: translateX(calc(var(--size) * 0.235)) scale(0.789472);
+                opacity: 0.72;
+              }
+              100% {
+                transform: translateX(calc(var(--size) * 0.25)) scale(0.73684);
+                opacity: 0.65;
+              }
+            }
+            .orbiting-container {
+              --size: 32px;
+              position: relative;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+              height: 100%;
+              animation: rotate-container 2.5s infinite linear;
+            }
+            .orbiting-dot {
+              position: absolute;
+              width: calc(var(--size) * 0.4);
+              height: calc(var(--size) * 0.4);
+              border-radius: 50%;
+              background-color: currentColor;
+              animation: orbit-motion 1.5s linear infinite;
+            }
+            .orbiting-dot:nth-child(2) {
+              animation: orbit-motion 1.5s linear -0.75s infinite;
+            }
+          `}</style>
+          <div className={`orbiting-container ${primaryColorClass}`}>
+            <div className="orbiting-dot" />
+            <div className="orbiting-dot" />
+          </div>
+        </div>
+      );
+
     default:
       return null;
   }
