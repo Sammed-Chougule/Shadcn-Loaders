@@ -4,7 +4,7 @@ A comprehensive collection of modern React loaders and spinners inspired by shad
 
 ## Landing Page
 
-![Shadcn Loaders Landing Page](./public/landing-page.png)
+![Shadcn Loaders Landing Page](./public/image.png)
 
 The ultimate collection of **shadcn loader** components. Optimized for performance, fully customizable with Tailwind CSS, and easy CLI installation.
 
