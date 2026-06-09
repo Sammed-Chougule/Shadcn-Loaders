@@ -24,7 +24,12 @@ export type LoaderVariant =
   | 'loader-dna'
   | 'hex-spin'
   | 'concentric-rings'
-  | 'dots-rotate';
+  | 'dots-rotate'
+  | 'morphing-hex'
+  | 'ripple-pulse'
+  | 'orbiting-spheres'
+  | 'paired-revolution'
+  | 'eyes-gaze';
 
 export interface LoaderItem {
   id: string;

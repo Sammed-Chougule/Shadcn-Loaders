@@ -30,4 +30,6 @@ export const LOADERS: LoaderItem[] = [
   { id: '26', name: 'Morphing Hexagon', variant: 'morphing-hex', description: 'Shape-shifting hexagon with smooth rotation.', category: 'complex' },
   { id: '27', name: 'Ripple Pulse', variant: 'ripple-pulse', description: 'Expanding concentric ripples like water.', category: 'abstract' },
   { id: '28', name: 'Orbiting Spheres', variant: 'orbiting-spheres', description: 'Two dots orbiting with 3D depth effect.', category: 'complex' },
+  { id: '29', name: 'Paired Revolution', variant: 'paired-revolution', description: 'Two dots orbiting in synchronized rotation.', category: 'complex' },
+  { id: '30', name: 'Eyes Gaze', variant: 'eyes-gaze', description: 'Animated eyes looking left and right.', category: 'abstract' },
 ];

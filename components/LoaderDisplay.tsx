@@ -448,6 +448,115 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
         </div>
       );
 
+    case 'paired-revolution':
+      return (
+        <div className={`${containerSize} relative flex items-center justify-center ${className}`}>
+          <style>{`
+            @keyframes loading-ui-twin-orbit-rotate {
+              100% {
+                transform: rotate(360deg) translate(155%);
+              }
+            }
+          `}</style>
+          {/* Center dot */}
+          <div
+            className={`absolute rounded-full ${primaryBgClass}`}
+            style={{
+              width: '10px',
+              height: '10px',
+              zIndex: 10,
+            }}
+          />
+          {/* Orbiting dots container */}
+          <div
+            className="absolute"
+            style={{
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <div
+              className={`absolute rounded-full ${primaryBgClass}`}
+              style={{
+                width: '10px',
+                height: '10px',
+                top: '50%',
+                left: '50%',
+                transform: "rotate(0deg) translate(155%)",
+                animation:
+                  "loading-ui-twin-orbit-rotate 1.4s ease infinite",
+                marginTop: '-5px',
+                marginLeft: '-5px',
+              }}
+            />
+            <div
+              className={`absolute rounded-full ${primaryBgClass}`}
+              style={{
+                width: '10px',
+                height: '10px',
+                top: '50%',
+                left: '50%',
+                transform: "rotate(0deg) translate(155%)",
+                animation:
+                  "loading-ui-twin-orbit-rotate 1.4s ease infinite",
+                animationDelay: "0.7s",
+                marginTop: '-5px',
+                marginLeft: '-5px',
+              }}
+            />
+          </div>
+        </div>
+      );
+
+    case 'eyes-gaze':
+      return (
+        <div className={`relative flex items-center justify-center gap-4 ${className}`}>
+          <style>{`
+            @keyframes gaze-left-right {
+              0% {
+                transform: translateX(-6px);
+              }
+              25% {
+                transform: translateX(-6px);
+              }
+              50% {
+                transform: translateX(6px);
+              }
+              75% {
+                transform: translateX(6px);
+              }
+              100% {
+                transform: translateX(-6px);
+              }
+            }
+          `}</style>
+          
+          {/* Left Eye */}
+          <div className="relative w-8 h-8 bg-zinc-900 dark:bg-zinc-50 rounded-full flex items-center justify-center">
+            <div
+              className="w-3 h-3 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center"
+              style={{
+                animation: "gaze-left-right 2s ease-in-out infinite",
+              }}
+            >
+              <div className="w-2 h-2 bg-zinc-900 dark:bg-zinc-50 rounded-full" />
+            </div>
+          </div>
+
+          {/* Right Eye */}
+          <div className="relative w-8 h-8 bg-zinc-900 dark:bg-zinc-50 rounded-full flex items-center justify-center">
+            <div
+              className="w-3 h-3 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center"
+              style={{
+                animation: "gaze-left-right 2s ease-in-out infinite",
+              }}
+            >
+              <div className="w-2 h-2 bg-zinc-900 dark:bg-zinc-50 rounded-full" />
+            </div>
+          </div>
+        </div>
+      );
+
     default:
       return null;
   }
