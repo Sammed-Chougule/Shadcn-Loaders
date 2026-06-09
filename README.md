@@ -1,7 +1,10 @@
-
 # Shadcn Loaders
 
 A comprehensive collection of modern React loaders and spinners inspired by shadcn/ui. Built with Tailwind CSS and optimized for both dark and light themes.
+
+## Landing Page
+
+![Shadcn Loaders Landing Page](./public/landing-page.png)
 
 ## NPM Package
 
