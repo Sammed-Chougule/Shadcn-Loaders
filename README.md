@@ -39,6 +39,17 @@ components/ui/loader.tsx
 - **Shadcn-style design**: Clean, modern loader UI for React projects.
 - **Tailwind-ready**: Style and customize quickly with utility classes.
 
+## Star History
+
+<a href="https://www.star-history.com/?repos=Sammed-Chougule%2FShadcn-Loaders&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Sammed-Chougule/Shadcn-Loaders&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Sammed-Chougule/Shadcn-Loaders&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Sammed-Chougule/Shadcn-Loaders&type=date&legend=top-left" />
+ </picture>
+</a>
+
+
 ## License
 
 This project is licensed under the MIT License.
