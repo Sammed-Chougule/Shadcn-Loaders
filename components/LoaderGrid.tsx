@@ -1,10 +1,10 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { LOADERS } from '../constants.tsx';
 import { LoaderDisplay } from './LoaderDisplay.tsx';
 import { LoaderItem } from '../types.ts';
+import { LoaderDetailPanel } from './LoaderDetailPanel.tsx';
 
-const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
+const LoaderCard: React.FC<{ loader: LoaderItem; onClick: () => void; isActive: boolean }> = ({ loader, onClick, isActive }) => {
   const [copied, setCopied] = useState(false);
 
   const copyCode = () => {
@@ -15,8 +15,15 @@ const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
   };
 
   return (
-    <article className="group relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 hover:border-black dark:hover:border-white transition-all hover:shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col items-center justify-between h-64 overflow-hidden">
-      <div className="flex-1 flex items-center justify-center scale-125 group-hover:scale-150 transition-transform duration-500" aria-hidden="true">
+    <article 
+      onClick={onClick}
+      className={`group cursor-pointer relative bg-white dark:bg-zinc-900 border rounded-2xl p-8 transition-all duration-300 flex flex-col items-center justify-between h-64 overflow-hidden ${
+        isActive 
+          ? 'border-zinc-950 dark:border-zinc-100 ring-2 ring-zinc-950/10 dark:ring-zinc-50/10 shadow-md bg-zinc-50/40 dark:bg-zinc-800/30' 
+          : 'border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-600 hover:shadow-[0_10px_30px_rgba(0,0,0,0.03)]'
+      }`}
+    >
+      <div className={`flex-1 flex items-center justify-center scale-125 transition-transform duration-500 ${isActive ? 'scale-135' : 'group-hover:scale-135'}`} aria-hidden="true">
         <LoaderDisplay variant={loader.variant} size="lg" className="text-zinc-900 dark:text-zinc-50" />
       </div>
       
@@ -27,7 +34,10 @@ const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
             <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{loader.description}</p>
           </div>
           <button 
-            onClick={copyCode}
+            onClick={(e) => {
+              e.stopPropagation();
+              copyCode();
+            }}
             className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 rounded-md border border-zinc-200 dark:border-zinc-700 active:scale-95"
             aria-label={`Copy code for ${loader.name}`}
             title="Copy Code"
@@ -51,12 +61,21 @@ const LoaderCard: React.FC<{ loader: LoaderItem }> = ({ loader }) => {
 const LoaderGrid: React.FC = () => {
   const [filter, setFilter] = useState<string>('all');
   const [search, setSearch] = useState('');
+  const [selectedLoader, setSelectedLoader] = useState<LoaderItem>(LOADERS[0]);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const filteredLoaders = LOADERS.filter(loader => {
     const matchesCategory = filter === 'all' || loader.category === filter;
     const matchesSearch = loader.name.toLowerCase().includes(search.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const handleLoaderClick = (loader: LoaderItem) => {
+    setSelectedLoader(loader);
+    if (window.innerWidth < 1024) {
+      panelRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
     <section id="explore" className="py-20 max-w-7xl mx-auto px-6">
@@ -75,7 +94,7 @@ const LoaderGrid: React.FC = () => {
                onChange={(e) => setSearch(e.target.value)}
                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-10 py-2 text-sm text-zinc-900 dark:text-zinc-50 focus:outline-none focus:ring-2 focus:ring-zinc-500/20 w-full sm:w-64 placeholder:text-zinc-400 dark:placeholder:text-zinc-600 transition-all"
                aria-label="Search loaders"
-             />
+              />
              <svg className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
              </svg>
@@ -97,16 +116,31 @@ const LoaderGrid: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredLoaders.length > 0 ? (
-          filteredLoaders.map((loader) => (
-            <LoaderCard key={loader.id} loader={loader} />
-          ))
-        ) : (
-          <div className="col-span-full py-20 text-center text-zinc-400 dark:text-zinc-600 bg-zinc-50 dark:bg-zinc-900/50 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
-            No shadcn loaders found matching your search.
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left column: Grid of loaders */}
+        <div className="lg:col-span-7 xl:col-span-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredLoaders.length > 0 ? (
+              filteredLoaders.map((loader) => (
+                <LoaderCard 
+                  key={loader.id} 
+                  loader={loader} 
+                  onClick={() => handleLoaderClick(loader)} 
+                  isActive={selectedLoader.id === loader.id}
+                />
+              ))
+            ) : (
+              <div className="col-span-full py-20 text-center text-zinc-400 dark:text-zinc-600 bg-zinc-50 dark:bg-zinc-900/50 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
+                No shadcn loaders found matching your search.
+              </div>
+            )}
           </div>
-        )}
+        </div>
+
+        {/* Right column: Sticky Interactive Detail Panel */}
+        <div ref={panelRef} className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-24 lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto lg:pr-2 custom-scrollbar">
+          <LoaderDetailPanel loader={selectedLoader} />
+        </div>
       </div>
     </section>
   );
