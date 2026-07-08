@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, Check, Terminal, Sliders, Laptop } from 'lucide-react';
+import { Copy, Check, Terminal, Sliders, Laptop, Pencil, X } from 'lucide-react';
 import { LoaderItem } from '../types';
 import { LoaderDisplay } from './LoaderDisplay';
 
@@ -27,6 +27,8 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
   const [installStyle, setInstallStyle] = useState<'cli' | 'manual'>('cli');
   const [cliType, setCliType] = useState<'modular' | 'master'>('modular');
   const [copied, setCopied] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editCode, setEditCode] = useState('');
 
   // Capitalize name (e.g. classic-spinner -> ClassicSpinner)
   const pascalName = loader.variant
@@ -1041,25 +1043,90 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
               Ready to copy to project
             </span>
             
-            <button
-              onClick={() => triggerCopy(unifiedCode)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-semibold bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all active:scale-95 shadow-sm cursor-pointer select-none"
-            >
-              {copied ? (
-                <>
-                  <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                  <span>Copied Config!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
-                  <span>Copy Snippet</span>
-                </>
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setEditCode(unifiedCode);
+                  setIsEditOpen(true);
+                }}
+                className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-amber-100 dark:bg-amber-900/40 hover:bg-amber-200 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-700 transition-all active:scale-95 shadow-sm cursor-pointer select-none"
+                title="Edit loader code"
+              >
+                <Pencil className="w-4 h-4 flex-shrink-0" />
+                <span>Edit</span>
+              </button>
+
+              <button
+                onClick={() => triggerCopy(unifiedCode)}
+                className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all active:scale-95 shadow-sm cursor-pointer select-none"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4 text-zinc-500 dark:text-zinc-400 flex-shrink-0" />
+                    <span>Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
+        {/* Edit Modal Popup */}
+        {isEditOpen && (
+          <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50 p-4">
+            <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-2xl border border-zinc-200 dark:border-zinc-700 max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-6 border-b border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50">
+                <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">Edit Loader Code</h2>
+                <button
+                  onClick={() => setIsEditOpen(false)}
+                  className="p-1 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-lg transition-colors"
+                  title="Close edit modal"
+                >
+                  <X className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
+                </button>
+              </div>
+
+              {/* Modal Content */}
+              <div className="flex-1 overflow-auto p-6">
+                <label className="block text-sm font-semibold text-zinc-700 dark:text-zinc-300 mb-3">
+                  Code
+                </label>
+                <textarea
+                  value={editCode}
+                  onChange={(e) => setEditCode(e.target.value)}
+                  className="w-full h-96 p-4 font-mono text-sm bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  spellCheck="false"
+                />
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-6 border-t border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 flex items-center justify-end gap-3">
+                <button
+                  onClick={() => setIsEditOpen(false)}
+                  className="px-4 py-2 rounded-lg text-sm font-semibold bg-zinc-200 dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50 hover:bg-zinc-300 dark:hover:bg-zinc-600 transition-all active:scale-95"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    triggerCopy(editCode);
+                    setIsEditOpen(false);
+                  }}
+                  className="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600 transition-all active:scale-95 flex items-center gap-2"
+                >
+                  <Copy className="w-4 h-4" />
+                  <span>Copy Edited Code</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
