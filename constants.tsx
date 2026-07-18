@@ -32,4 +32,9 @@ export const LOADERS: LoaderItem[] = [
   { id: '28', name: 'Orbiting Spheres', variant: 'orbiting-spheres', description: 'Two dots orbiting with 3D depth effect.', category: 'complex' },
   { id: '29', name: 'Paired Revolution', variant: 'paired-revolution', description: 'Two dots orbiting in synchronized rotation.', category: 'complex' },
   { id: '30', name: 'Eyes Gaze', variant: 'eyes-gaze', description: 'Animated eyes looking left and right.', category: 'abstract' },
+  { id: '31', name: 'Ripple Wave', variant: 'ripple-wave', description: 'Wave-like ripple effect.', category: 'abstract' },
+  { id: '32', name: 'Audio Wave', variant: 'audio-wave', description: 'Animated audio waveform.', category: 'utility' },
+  { id: '33', name: 'Fading Ring', variant: 'fading-ring', description: 'Ring that fades in and out.', category: 'abstract' },
+  { id: '34', name: 'Morphing Shape', variant: 'morphing-shape', description: 'Shape morphing between different forms.', category: 'complex' },
+  { id: '35', name: 'Dots Chase', variant: 'dots-chase', description: 'Dots chasing each other in a circular path.', category: 'simple' },
 ];
