@@ -1,7 +1,7 @@
 {
   "name": "shadcn-loaders",
   "version": "1.0.2",
-  "description": "A collection of modern shadcn-inspired React loaders.",
+  "description": "A shadcn-compatible registry package for modern React loaders and loading states. Install with npx shadcn add @shadcnloaders/loader.",
   "author": "Sammed-Chougule",
   "license": "MIT",
   "homepage": "https://github.com/Sammed-Chougule/Shadcn-Loaders",

@@ -21,17 +21,26 @@ The ultimate collection of **shadcn loader** components. Optimized for performan
 
 ## Installation
 
-Add a loader component to your project:
+Add a loader component to your project with the shadcn registry syntax:
 
 ```bash
-npx shadcn-loaders@latest add loader
+npx shadcn add @shadcnloaders/loader
 ```
 
-This command creates:
+This command installs the loader component into your project.
+
+## shadcn Registry
+
+This package also exposes a shadcn-compatible registry entry for direct use with the shadcn CLI:
 
 ```bash
-components/ui/loader.tsx
+npx shadcn add @shadcnloaders/loader
 ```
+
+Registry files are available at:
+- [registry.json](registry.json)
+- [loader.json](loader.json)
+- [registry/loader.tsx](registry/loader.tsx)
 
 ## Features
 

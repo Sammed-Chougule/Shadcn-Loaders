@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "shadcnloaders",
+  "homepage": "https://shadcn-loaders.vercel.app",
+  "description": "A public registry of shadcn-inspired animated loaders and loading states.",
+  "items": [
+    {
+      "name": "loader",
+      "type": "registry:component",
+      "title": "Loader",
+      "description": "A polished animated loader component for loading states.",
+      "files": [
+        {
+          "path": "registry/loader.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}

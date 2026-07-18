@@ -6,10 +6,10 @@ const InstallationSection: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const commands = {
-    npm: 'npx shadcn-loaders@latest add loader',
-    yarn: 'yarn dlx shadcn-loaders@latest add loader',
-    pnpm: 'pnpm dlx shadcn-loaders@latest add loader',
-    bun: 'bun x shadcn-loaders@latest add loader'
+    npm: 'npx shadcn add @shadcnloaders/loader',
+    yarn: 'npx shadcn add @shadcnloaders/loader',
+    pnpm: 'npx shadcn add @shadcnloaders/loader',
+    bun: 'npx shadcn add @shadcnloaders/loader'
   };
 
   const copyToClipboard = () => {

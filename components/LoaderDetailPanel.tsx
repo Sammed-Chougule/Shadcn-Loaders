@@ -814,8 +814,8 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
   const getUnifiedCodeContent = () => {
     if (installStyle === 'cli') {
       const command = cliType === 'modular' 
-        ? `npx shadcn-loaders@latest add ${loader.variant}`
-        : `npx shadcn-loaders@latest add loader`;
+        ? `npx shadcn add @shadcnloaders/${loader.variant}`
+        : `npx shadcn add @shadcnloaders/loader`;
 
       const imprt = cliType === 'modular'
         ? `import { ${pascalName} } from "@/components/ui/${loader.variant}";`

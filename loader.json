@@ -1,0 +1,13 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "loader",
+  "type": "registry:component",
+  "title": "Loader",
+  "description": "A polished animated loader component for loading states.",
+  "files": [
+    {
+      "path": "registry/loader.tsx",
+      "type": "registry:component"
+    }
+  ]
+}
