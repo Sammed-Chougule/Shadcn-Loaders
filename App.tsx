@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import LoaderGrid from './components/LoaderGrid.tsx';
 import InstallationSection from './components/InstallationSection.tsx';
 
@@ -211,6 +212,7 @@ const App: React.FC = () => {
           </p>
         </div>
       </footer>
+      <Analytics />
     </div>
   );
 };
