@@ -1,18 +1,14 @@
+import React from "react";
+import { LoaderProps, LoaderVariant } from "../types";
 
-import React from 'react';
-import { LoaderProps, LoaderVariant } from '../types';
-
-export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> = ({ 
-  variant, 
-  size = 'md', 
-  className = '', 
-  color = 'currentColor' 
-}) => {
+export const LoaderDisplay: React.FC<
+  LoaderProps & { variant: LoaderVariant }
+> = ({ variant, size = "md", className = "", color = "currentColor" }) => {
   const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12',
-    xl: 'w-16 h-16'
+    sm: "w-4 h-4",
+    md: "w-8 h-8",
+    lg: "w-12 h-12",
+    xl: "w-16 h-16",
   };
 
   const containerSize = sizeClasses[size];
@@ -21,25 +17,27 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
   const primaryBorderClass = "border-zinc-900 dark:border-zinc-50";
 
   switch (variant) {
-    case 'classic-spinner':
+    case "classic-spinner":
       return (
-        <div className={`${containerSize} border-2 border-zinc-200 dark:border-zinc-800 border-t-zinc-900 dark:border-t-zinc-50 rounded-full animate-spin ${className}`} />
+        <div
+          className={`${containerSize} border-2 border-zinc-200 dark:border-zinc-800 border-t-zinc-900 dark:border-t-zinc-50 rounded-full animate-spin ${className}`}
+        />
       );
 
-    case 'dots-pulse':
+    case "dots-pulse":
       return (
         <div className={`flex gap-1 items-center ${className}`}>
           {[0, 1, 2].map((i) => (
-            <div 
+            <div
               key={i}
-              className={`${size === 'sm' ? 'w-1 h-1' : 'w-2 h-2'} ${primaryBgClass} rounded-full animate-bounce`} 
+              className={`${size === "sm" ? "w-1 h-1" : "w-2 h-2"} ${primaryBgClass} rounded-full animate-bounce`}
               style={{ animationDelay: `${i * 0.15}s` }}
             />
           ))}
         </div>
       );
 
-    case 'pulse-ring':
+    case "pulse-ring":
       return (
         <div className={`relative ${containerSize} ${className}`}>
           <div className="absolute inset-0 border-2 border-zinc-900 dark:border-zinc-50 rounded-full animate-ping opacity-75" />
@@ -47,172 +45,219 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
         </div>
       );
 
-    case 'bars':
+    case "bars":
       return (
         <div className={`flex items-end gap-1 h-8 ${className}`}>
           {[0, 1, 2, 3, 4].map((i) => (
-            <div 
+            <div
               key={i}
               className={`w-1 ${primaryBgClass} rounded-full animate-[pulse_1s_ease-in-out_infinite]`}
-              style={{ height: `${20 + Math.random() * 80}%`, animationDelay: `${i * 0.1}s` }}
+              style={{
+                height: `${20 + Math.random() * 80}%`,
+                animationDelay: `${i * 0.1}s`,
+              }}
             />
           ))}
         </div>
       );
 
-    case 'square-spin':
+    case "square-spin":
       return (
-        <div className={`${containerSize} ${primaryBgClass} animate-[spin_2s_linear_infinite] rounded-sm shadow-sm ${className}`} />
+        <div
+          className={`${containerSize} ${primaryBgClass} animate-[spin_2s_linear_infinite] rounded-sm shadow-sm ${className}`}
+        />
       );
 
-    case 'double-bounce':
+    case "double-bounce":
       return (
         <div className={`relative ${containerSize} ${className}`}>
-          <div className={`absolute inset-0 ${primaryBgClass} rounded-full opacity-60 animate-bounce`} />
+          <div
+            className={`absolute inset-0 ${primaryBgClass} rounded-full opacity-60 animate-bounce`}
+          />
           <div className="absolute inset-0 bg-zinc-400 dark:bg-zinc-600 rounded-full opacity-60 animate-bounce delay-700" />
         </div>
       );
 
-    case 'circular-progress':
+    case "circular-progress":
       return (
-        <svg className={`${containerSize} animate-spin ${className}`} viewBox="0 0 50 50">
-          <circle 
-            className="stroke-zinc-900 dark:stroke-zinc-50 fill-none" 
-            cx="25" cy="25" r="20" 
-            strokeWidth="4" 
+        <svg
+          className={`${containerSize} animate-spin ${className}`}
+          viewBox="0 0 50 50"
+        >
+          <circle
+            className="stroke-zinc-900 dark:stroke-zinc-50 fill-none"
+            cx="25"
+            cy="25"
+            r="20"
+            strokeWidth="4"
             strokeLinecap="round"
             strokeDasharray="80, 200"
           />
         </svg>
       );
 
-    case 'wave-loader':
+    case "wave-loader":
       return (
         <div className={`flex gap-0.5 ${className}`}>
           {[...Array(10)].map((_, i) => (
-            <div 
-              key={i} 
-              className={`w-1 h-4 ${primaryBgClass} animate-[pulse_1.5s_infinite]`} 
+            <div
+              key={i}
+              className={`w-1 h-4 ${primaryBgClass} animate-[pulse_1.5s_infinite]`}
               style={{ animationDelay: `${i * 0.1}s` }}
             />
           ))}
         </div>
       );
 
-    case 'skeleton':
+    case "skeleton":
       return (
-        <div className={`relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 rounded border border-zinc-200/50 dark:border-zinc-800/50 ${containerSize} ${className}`}>
+        <div
+          className={`relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 rounded border border-zinc-200/50 dark:border-zinc-800/50 ${containerSize} ${className}`}
+        >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent animate-shimmer -translate-x-full" />
         </div>
       );
 
-    case 'glow-pulse':
+    case "glow-pulse":
       return (
-        <div className={`${primaryBgClass} rounded-full shadow-[0_0_20px_rgba(0,0,0,0.2)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] animate-pulse ${containerSize} ${className}`} />
+        <div
+          className={`${primaryBgClass} rounded-full shadow-[0_0_20px_rgba(0,0,0,0.2)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] animate-pulse ${containerSize} ${className}`}
+        />
       );
 
-    case 'clock':
+    case "clock":
       return (
-        <div className={`${containerSize} border-2 border-zinc-300 dark:border-zinc-700 rounded-full relative ${className}`}>
+        <div
+          className={`${containerSize} border-2 border-zinc-300 dark:border-zinc-700 rounded-full relative ${className}`}
+        >
           <div className="absolute top-1/2 left-1/2 w-[40%] h-0.5 bg-zinc-900 dark:bg-zinc-50 origin-left -rotate-90 animate-[spin_2s_linear_infinite]" />
           <div className="absolute top-1/2 left-1/2 w-[30%] h-0.5 bg-zinc-500 origin-left -rotate-90 animate-[spin_8s_linear_infinite]" />
         </div>
       );
 
-    case 'hourglass':
+    case "hourglass":
       return (
-        <div className={`${containerSize} relative animate-[spin_2s_ease-in-out_infinite] ${className}`}>
+        <div
+          className={`${containerSize} relative animate-[spin_2s_ease-in-out_infinite] ${className}`}
+        >
           <div className="absolute inset-0 border-t-[16px] border-t-zinc-900 dark:border-t-zinc-50 border-x-[16px] border-x-transparent border-b-[16px] border-b-transparent rounded-t-full" />
           <div className="absolute inset-0 border-b-[16px] border-b-zinc-400 dark:border-b-zinc-600 border-x-[16px] border-x-transparent border-t-[16px] border-t-transparent rounded-b-full" />
         </div>
       );
 
-    case 'gear':
+    case "gear":
       return (
-        <div className={`${containerSize} ${primaryColorClass} animate-[spin_3s_linear_infinite] ${className}`}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <div
+          className={`${containerSize} ${primaryColorClass} animate-[spin_3s_linear_infinite] ${className}`}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <path d="M12.22 2h-.44a2 2 0 0 0-2 2 2 2 0 0 1-2 2 2 2 0 0 0-2 2 2 2 0 0 1-2 2 2 2 0 0 0-2 2v.44a2 2 0 0 0 2 2 2 2 0 0 1 2 2 2 2 0 0 0 2 2 2 2 0 0 1 2 2 2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2 2 2 0 0 1 2-2 2 2 0 0 0 2-2 2 2 0 0 1 2-2 2 2 0 0 0 2-2v-.44a2 2 0 0 0-2-2 2 2 0 0 1-2-2 2 2 0 0 0-2-2 2 2 0 0 1-2-2 2 2 0 0 0-2-2Z" />
             <circle cx="12" cy="12" r="3" />
           </svg>
         </div>
       );
 
-    case 'orbit':
+    case "orbit":
       return (
-        <div className={`${containerSize} relative flex items-center justify-center ${className}`}>
+        <div
+          className={`${containerSize} relative flex items-center justify-center ${className}`}
+        >
           <div className={`w-2 h-2 ${primaryBgClass} rounded-full`} />
           <div className="absolute w-full h-full border border-zinc-200 dark:border-zinc-800 rounded-full animate-spin">
-             <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 ${primaryBgClass} rounded-full`} />
+            <div
+              className={`absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 ${primaryBgClass} rounded-full`}
+            />
           </div>
         </div>
       );
 
-    case 'snake':
+    case "snake":
       return (
-        <div className={`${containerSize} border-2 border-zinc-100 dark:border-zinc-900 relative rounded-md overflow-hidden ${className}`}>
-          <div className={`absolute inset-0 border-2 ${primaryBorderClass} animate-snake`} />
+        <div
+          className={`${containerSize} border-2 border-zinc-100 dark:border-zinc-900 relative rounded-md overflow-hidden ${className}`}
+        >
+          <div
+            className={`absolute inset-0 border-2 ${primaryBorderClass} animate-snake`}
+          />
         </div>
       );
 
-    case 'infinity':
+    case "infinity":
       return (
         <div className={`${containerSize} ${primaryColorClass} ${className}`}>
           <svg viewBox="0 0 100 50" className="w-full h-full">
-            <path 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="4" 
-              strokeDasharray="10 5" 
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+              strokeDasharray="10 5"
               className="animate-[shimmer_2s_linear_infinite]"
-              d="M25,25 C25,10 40,10 50,25 C60,40 75,40 75,25 C75,10 60,10 50,25 C40,40 25,40 25,25" 
+              d="M25,25 C25,10 40,10 50,25 C60,40 75,40 75,25 C75,10 60,10 50,25 C40,40 25,40 25,25"
             />
           </svg>
         </div>
       );
 
-    case 'text-shimmer':
+    case "text-shimmer":
       return (
-        <div className={`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-400 via-zinc-900 dark:via-zinc-100 to-zinc-400 bg-[length:200%_auto] animate-[shimmer_2s_linear_infinite] ${className}`}>
+        <div
+          className={`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-400 via-zinc-900 dark:via-zinc-100 to-zinc-400 bg-[length:200%_auto] animate-[shimmer_2s_linear_infinite] ${className}`}
+        >
           Loading...
         </div>
       );
 
-    case 'grid':
+    case "grid":
       return (
         <div className={`grid grid-cols-3 gap-1 ${className}`}>
           {[...Array(9)].map((_, i) => (
-            <div 
-              key={i} 
-              className={`w-2 h-2 ${primaryBgClass} rounded-sm animate-pulse`} 
+            <div
+              key={i}
+              className={`w-2 h-2 ${primaryBgClass} rounded-sm animate-pulse`}
               style={{ animationDelay: `${i * 0.1}s` }}
             />
           ))}
         </div>
       );
 
-    case 'heartbeat':
+    case "heartbeat":
       return (
-        <div className={`${containerSize} ${primaryColorClass} animate-[ping_1.5s_infinite] flex items-center justify-center ${className}`}>
-          <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+        <div
+          className={`${containerSize} ${primaryColorClass} animate-[ping_1.5s_infinite] flex items-center justify-center ${className}`}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="w-full h-full"
+          >
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
           </svg>
         </div>
       );
 
-    case 'matrix':
+    case "matrix":
       return (
-        <div className={`flex flex-col gap-0.5 overflow-hidden ${containerSize} items-center ${className}`}>
+        <div
+          className={`flex flex-col gap-0.5 overflow-hidden ${containerSize} items-center ${className}`}
+        >
           {[...Array(4)].map((_, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="w-full h-1 bg-zinc-100 dark:bg-zinc-900 relative"
             >
-              <div 
+              <div
                 className={`absolute top-0 bottom-0 w-4 ${primaryBgClass} shadow-[0_0_10px_rgba(0,0,0,0.1)]`}
-                style={{ 
-                  left: '-20%', 
+                style={{
+                  left: "-20%",
                   animation: `shimmer 2s linear infinite`,
-                  animationDelay: `${i * 0.5}s`
+                  animationDelay: `${i * 0.5}s`,
                 }}
               />
             </div>
@@ -220,62 +265,84 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
         </div>
       );
 
-    case 'loader-dna':
+    case "loader-dna":
       return (
-        <div className={`flex justify-center items-center h-full gap-1 ${className}`}>
+        <div
+          className={`flex justify-center items-center h-full gap-1 ${className}`}
+        >
           {[...Array(5)].map((_, i) => (
             <div key={i} className="flex flex-col gap-2">
-              <div className={`w-2 h-2 ${primaryBgClass} rounded-full animate-bounce`} style={{ animationDelay: `${i * 0.1}s` }} />
-              <div className="w-2 h-2 bg-zinc-300 dark:bg-zinc-700 rounded-full animate-bounce" style={{ animationDelay: `${(i * 0.1) + 0.5}s` }} />
+              <div
+                className={`w-2 h-2 ${primaryBgClass} rounded-full animate-bounce`}
+                style={{ animationDelay: `${i * 0.1}s` }}
+              />
+              <div
+                className="w-2 h-2 bg-zinc-300 dark:bg-zinc-700 rounded-full animate-bounce"
+                style={{ animationDelay: `${i * 0.1 + 0.5}s` }}
+              />
             </div>
           ))}
         </div>
       );
 
-    case 'floating-bubble':
+    case "floating-bubble":
       return (
-        <div className={`relative overflow-hidden ${containerSize} border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50 ${className}`}>
+        <div
+          className={`relative overflow-hidden ${containerSize} border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50 ${className}`}
+        >
           {[...Array(5)].map((_, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className={`absolute ${primaryBgClass} opacity-30 rounded-full animate-bounce`}
-              style={{ 
+              style={{
                 width: `${Math.random() * 8 + 4}px`,
                 height: `${Math.random() * 8 + 4}px`,
                 left: `${Math.random() * 80 + 10}%`,
-                bottom: '-20%',
+                bottom: "-20%",
                 animationDuration: `${Math.random() * 3 + 2}s`,
-                animationDelay: `${Math.random() * 2}s`
+                animationDelay: `${Math.random() * 2}s`,
               }}
             />
           ))}
         </div>
       );
 
-
-    case 'hex-spin':
+    case "hex-spin":
       return (
-        <div className={`${containerSize} ${primaryColorClass} flex items-center justify-center ${className}`}>
-          <svg viewBox="0 0 100 100" className="w-full h-full animate-[spin_1.6s_linear_infinite]" fill="none" stroke="currentColor" strokeWidth="4">
-            <polygon points="50,10 80,30 80,70 50,90 20,70 20,30" className="stroke-current" />
+        <div
+          className={`${containerSize} ${primaryColorClass} flex items-center justify-center ${className}`}
+        >
+          <svg
+            viewBox="0 0 100 100"
+            className="w-full h-full animate-[spin_1.6s_linear_infinite]"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="4"
+          >
+            <polygon
+              points="50,10 80,30 80,70 50,90 20,70 20,30"
+              className="stroke-current"
+            />
           </svg>
         </div>
       );
 
-    case 'concentric-rings':
+    case "concentric-rings":
       return (
-        <div className={`relative ${containerSize} flex items-center justify-center ${className}`}>
+        <div
+          className={`relative ${containerSize} flex items-center justify-center ${className}`}
+        >
           <div className="absolute inset-0 rounded-full border-2 border-zinc-200 dark:border-zinc-800 animate-ping" />
           <div className="absolute inset-2 rounded-full border-2 border-zinc-300 dark:border-zinc-700 animate-ping delay-200" />
           <div className="absolute inset-4 rounded-full border-2 border-zinc-400 dark:border-zinc-600 animate-pulse delay-400" />
         </div>
       );
 
-    case 'dots-rotate':
+    case "dots-rotate":
       return (
         <div className={`relative ${containerSize} ${className}`}>
           <div className="absolute inset-0 flex items-center justify-center animate-[spin_1.2s_linear_infinite]">
-            {[0,1,2].map((i) => (
+            {[0, 1, 2].map((i) => (
               <div
                 key={i}
                 className="absolute w-2 h-2 bg-zinc-900 dark:bg-zinc-50 rounded-full"
@@ -286,10 +353,16 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
         </div>
       );
 
-    case 'morphing-hex':
+    case "morphing-hex":
       return (
         <div className={`${containerSize} ${className}`}>
-          <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="4">
+          <svg
+            viewBox="0 0 100 100"
+            className="w-full h-full"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="4"
+          >
             <style>{`
               @keyframes morphHex {
                 0% { d: path('M50,10 L80,30 L80,70 L50,90 L20,70 L20,30 Z'); transform: rotate(0deg); }
@@ -300,14 +373,19 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
               }
               .morphing { animation: morphHex 3s ease-in-out infinite; }
             `}</style>
-            <polygon points="50,10 80,30 80,70 50,90 20,70 20,30" className="morphing stroke-zinc-900 dark:stroke-zinc-50" />
+            <polygon
+              points="50,10 80,30 80,70 50,90 20,70 20,30"
+              className="morphing stroke-zinc-900 dark:stroke-zinc-50"
+            />
           </svg>
         </div>
       );
 
-    case 'ripple-pulse':
+    case "ripple-pulse":
       return (
-        <div className={`relative ${containerSize} flex items-center justify-center overflow-hidden ${className}`}>
+        <div
+          className={`relative ${containerSize} flex items-center justify-center overflow-hidden ${className}`}
+        >
           <div className={`absolute w-2 h-2 ${primaryBgClass} rounded-full`} />
           {[0, 1, 2].map((i) => (
             <div
@@ -318,14 +396,14 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
                 height: `${12 + i * 8}px`,
                 animation: `ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite`,
                 animationDelay: `${i * 0.4}s`,
-                opacity: 1 - i * 0.3
+                opacity: 1 - i * 0.3,
               }}
             />
           ))}
         </div>
       );
 
-    case 'orbiting-spheres':
+    case "orbiting-spheres":
       return (
         <div className={`${containerSize} ${className}`}>
           <style>{`
@@ -448,9 +526,11 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
         </div>
       );
 
-    case 'paired-revolution':
+    case "paired-revolution":
       return (
-        <div className={`${containerSize} relative flex items-center justify-center ${className}`}>
+        <div
+          className={`${containerSize} relative flex items-center justify-center ${className}`}
+        >
           <style>{`
             @keyframes loading-ui-twin-orbit-rotate {
               100% {
@@ -462,8 +542,8 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
           <div
             className={`absolute rounded-full ${primaryBgClass}`}
             style={{
-              width: '10px',
-              height: '10px',
+              width: "10px",
+              height: "10px",
               zIndex: 10,
             }}
           />
@@ -471,46 +551,46 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
           <div
             className="absolute"
             style={{
-              width: '100%',
-              height: '100%',
+              width: "100%",
+              height: "100%",
             }}
           >
             <div
               className={`absolute rounded-full ${primaryBgClass}`}
               style={{
-                width: '10px',
-                height: '10px',
-                top: '50%',
-                left: '50%',
+                width: "10px",
+                height: "10px",
+                top: "50%",
+                left: "50%",
                 transform: "rotate(0deg) translate(155%)",
-                animation:
-                  "loading-ui-twin-orbit-rotate 1.4s ease infinite",
-                marginTop: '-5px',
-                marginLeft: '-5px',
+                animation: "loading-ui-twin-orbit-rotate 1.4s ease infinite",
+                marginTop: "-5px",
+                marginLeft: "-5px",
               }}
             />
             <div
               className={`absolute rounded-full ${primaryBgClass}`}
               style={{
-                width: '10px',
-                height: '10px',
-                top: '50%',
-                left: '50%',
+                width: "10px",
+                height: "10px",
+                top: "50%",
+                left: "50%",
                 transform: "rotate(0deg) translate(155%)",
-                animation:
-                  "loading-ui-twin-orbit-rotate 1.4s ease infinite",
+                animation: "loading-ui-twin-orbit-rotate 1.4s ease infinite",
                 animationDelay: "0.7s",
-                marginTop: '-5px',
-                marginLeft: '-5px',
+                marginTop: "-5px",
+                marginLeft: "-5px",
               }}
             />
           </div>
         </div>
       );
 
-    case 'eyes-gaze':
+    case "eyes-gaze":
       return (
-        <div className={`relative flex items-center justify-center gap-4 ${className}`}>
+        <div
+          className={`relative flex items-center justify-center gap-4 ${className}`}
+        >
           <style>{`
             @keyframes gaze-left-right {
               0% {
@@ -530,7 +610,7 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
               }
             }
           `}</style>
-          
+
           {/* Left Eye */}
           <div className="relative w-8 h-8 bg-zinc-900 dark:bg-zinc-50 rounded-full flex items-center justify-center">
             <div
@@ -554,6 +634,85 @@ export const LoaderDisplay: React.FC<LoaderProps & { variant: LoaderVariant }> =
               <div className="w-2 h-2 bg-zinc-900 dark:bg-zinc-50 rounded-full" />
             </div>
           </div>
+        </div>
+      );
+
+    case "ripple-wave":
+      return (
+        <div
+          className={`relative ${containerSize} flex items-center justify-center ${className}`}
+        >
+          <div
+            className={`absolute inset-0 border-4 ${primaryBorderClass} rounded-full animate-ping opacity-75`}
+          />
+          <div className={`w-3 h-3 ${primaryBgClass} rounded-full`} />
+        </div>
+      );
+
+    case "audio-wave":
+      return (
+        <div className={`flex items-center gap-1 h-6 ${className}`}>
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className={`w-1 h-full ${primaryBgClass} rounded-full animate-[pulse_1s_ease-in-out_infinite]`}
+              style={{ animationDelay: `${i * 0.2}s` }}
+            />
+          ))}
+        </div>
+      );
+
+    case "fading-ring":
+      return (
+        <svg
+          className={`${containerSize} animate-spin ${className}`}
+          viewBox="0 0 32 32"
+        >
+          <circle
+            className="stroke-zinc-900 dark:stroke-zinc-50 fill-none opacity-25"
+            cx="16"
+            cy="16"
+            r="14"
+            strokeWidth="3"
+          />
+          <circle
+            className="stroke-zinc-900 dark:stroke-zinc-50 fill-none"
+            cx="16"
+            cy="16"
+            r="14"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray="20 60"
+          />
+        </svg>
+      );
+
+    case "morphing-shape":
+      return (
+        <div className={`${containerSize} ${className}`}>
+          <style>{`
+            @keyframes morphShape {
+              0%, 100% { border-radius: 4px; transform: rotate(0deg); }
+              50% { border-radius: 50%; transform: rotate(180deg); }
+            }
+          `}</style>
+          <div
+            className={`w-full h-full ${primaryBgClass}`}
+            style={{ animation: "morphShape 2s ease-in-out infinite" }}
+          />
+        </div>
+      );
+
+    case "dots-chase":
+      return (
+        <div className={`flex items-center justify-center gap-2 ${className}`}>
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className={`w-2 h-2 ${primaryBgClass} rounded-full animate-[pulse_1.2s_infinite]`}
+              style={{ animationDelay: `${i * 0.2}s` }}
+            />
+          ))}
         </div>
       );
 

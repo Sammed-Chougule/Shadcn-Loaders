@@ -29,7 +29,14 @@ export type LoaderVariant =
   | 'ripple-pulse'
   | 'orbiting-spheres'
   | 'paired-revolution'
-  | 'eyes-gaze';
+  | 'eyes-gaze'
+  | 'ripple-wave'
+  | 'audio-wave'
+  | 'fading-ring'
+  | 'morphing-shape'
+  | 'dots-chase'
+
+  
 
 export interface LoaderItem {
   id: string;

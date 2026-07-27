@@ -9,10 +9,10 @@ const target = args[1];
 
 const helpText = `
 Usage:
-  shadcn-loaders add loader
+  shadcn add @shadcnloaders/loader
 
 Examples:
-  npx shadcn-loaders@latest add loader
+  npx shadcn add @shadcnloaders/loader
 `.trim();
 
 const loaderTemplate = `import * as React from "react";

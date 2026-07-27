@@ -1,0 +1,37 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "shadcnloaders",
+  "homepage": "https://shadcnloaders.com",
+  "items": [
+    {
+      "name": "loader",
+      "type": "registry:ui",
+      "title": "Loader",
+      "description": "A single flexible loading spinner component with 22 built-in animated variants (spinner, dots, bars, skeleton, DNA, matrix and more), Tailwind dark mode support, and configurable size.",
+      "files": [
+        {
+          "path": "registry/loader.tsx",
+          "type": "registry:ui"
+        }
+      ],
+      "css": {
+        "@keyframes snake": {
+          "0%, 100%": { "clip-path": "inset(0 0 95% 0)" },
+          "25%": { "clip-path": "inset(0 95% 0 0)" },
+          "50%": { "clip-path": "inset(95% 0 0 0)" },
+          "75%": { "clip-path": "inset(0 0 0 95%)" }
+        },
+        "@keyframes shimmer": {
+          "0%": { "transform": "translateX(-100%)" },
+          "100%": { "transform": "translateX(100%)" }
+        },
+        "@utility animate-snake": {
+          "animation": "snake 2s linear infinite"
+        },
+        "@utility animate-shimmer": {
+          "animation": "shimmer 2s infinite"
+        }
+      }
+    }
+  ]
+}

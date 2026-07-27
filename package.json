@@ -1,7 +1,7 @@
 {
   "name": "shadcn-loaders",
-  "version": "1.0.1",
-  "description": "A collection of modern shadcn-inspired React loaders.",
+  "version": "1.0.2",
+  "description": "A shadcn-compatible registry package for modern React loaders and loading states. Install with npx shadcn add @shadcnloaders/loader.",
   "author": "Sammed-Chougule",
   "license": "MIT",
   "homepage": "https://github.com/Sammed-Chougule/Shadcn-Loaders",
@@ -28,19 +28,20 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "shadcn build && vite build",
+    "preview": "vite preview",
+    "registry:build": "shadcn build"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
+    "lucide-react": "^1.27.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.0",
+    "shadcn": "^4.15.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
