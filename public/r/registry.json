@@ -10,7 +10,7 @@
       "description": "A single flexible loading spinner component with 22 built-in animated variants (spinner, dots, bars, skeleton, DNA, matrix and more), Tailwind dark mode support, and configurable size.",
       "files": [
         {
-          "path": "registry/loader/loader.tsx",
+          "path": "registry/loader.tsx",
           "type": "registry:ui"
         }
       ],
