@@ -765,7 +765,255 @@ export function EyesGaze({ className = '' }: LoaderProps) {
       </div>
     </div>
   );
-}`
+}`,
+    'atom': `import * as React from "react";
+
+type LoaderProps = {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+};
+
+export function Atom({ size = 'md', className = '' }: LoaderProps) {
+  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
+  const containerSize = sizeClasses[size] || sizeClasses.md;
+  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
+  return (
+    <div className={\`relative \${containerSize} flex items-center justify-center \${className}\`}>
+      <style>{\`
+        @keyframes atomOrbit {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      \`}</style>
+      <div className={\`absolute z-10 w-1/5 h-1/5 rounded-full \${primaryBgClass}\`} />
+      {[0, 60, 120].map((rot, i) => (
+        <div
+          key={rot}
+          className="absolute inset-0"
+          style={{
+            transform: \`rotate(\${rot}deg)\`,
+            animation: \`atomOrbit \${2 + i * 0.5}s linear infinite\`,
+            animationDelay: \`\${i * -0.8}s\`,
+          }}
+        >
+          <div className="absolute top-1/2 left-1/2 w-full h-2/5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-zinc-950/40 dark:border-zinc-50/40" />
+          <div className={\`absolute top-1/2 left-0 w-1/5 h-1/5 -translate-y-1/2 -translate-x-1/2 rounded-full \${primaryBgClass}\`} />
+        </div>
+      ))}
+    </div>
+  );
+}`,
+    'solar-system': `import * as React from "react";
+
+type LoaderProps = {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+};
+
+export function SolarSystem({ size = 'md', className = '' }: LoaderProps) {
+  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
+  const containerSize = sizeClasses[size] || sizeClasses.md;
+  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
+  return (
+    <div className={\`relative \${containerSize} flex items-center justify-center \${className}\`}>
+      <style>{\`
+        @keyframes solarSpin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      \`}</style>
+      <div className={\`absolute z-10 w-[16%] h-[16%] rounded-full \${primaryBgClass}\`} />
+      {[
+        { inset: '8%', speed: 3.5, delay: 0 },
+        { inset: '20%', speed: 2.6, delay: -1.3 },
+        { inset: '32%', speed: 5.4, delay: -0.4 },
+      ].map((ring, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full border border-zinc-950/30 dark:border-zinc-50/30"
+          style={{
+            inset: ring.inset,
+            animation: \`solarSpin \${ring.speed}s linear infinite\`,
+            animationDelay: \`\${ring.delay}s\`,
+          }}
+        >
+          <div
+            className={\`absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full \${i === 1 ? 'bg-zinc-400 dark:bg-zinc-600' : primaryBgClass}\`}
+            style={{ width: \`\${[9, 6, 7][i]}%\`, height: \`\${[9, 6, 7][i]}%\` }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}`,
+    'radar-sweep': `import * as React from "react";
+
+type LoaderProps = {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+};
+
+export function RadarSweep({ size = 'md', className = '' }: LoaderProps) {
+  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
+  const containerSize = sizeClasses[size] || sizeClasses.md;
+  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
+  return (
+    <div className={\`relative overflow-hidden rounded-full border border-zinc-950/30 dark:border-zinc-50/30 \${containerSize} text-zinc-950 dark:text-zinc-50 \${className}\`}>
+      <style>{\`
+        @keyframes radarSpin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      \`}</style>
+      <div className="absolute rounded-full border border-zinc-950/20 dark:border-zinc-50/20" style={{ inset: '22%' }} />
+      <div className="absolute rounded-full border border-zinc-950/15 dark:border-zinc-50/15" style={{ inset: '42%' }} />
+      <div className="absolute top-1/2 left-0 right-0 h-px bg-zinc-950/15 dark:bg-zinc-50/15" />
+      <div className="absolute top-0 bottom-0 left-1/2 w-px bg-zinc-950/15 dark:bg-zinc-50/15" />
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background: 'conic-gradient(from 0deg, currentColor 0deg, transparent 62deg)',
+          animation: 'radarSpin 1.8s linear infinite',
+          opacity: 0.5,
+        }}
+      />
+      <div className={\`absolute w-[12%] h-[12%] rounded-full \${primaryBgClass} animate-ping\`} style={{ left: '68%', top: '58%', opacity: 0.9 }} />
+      <div className={\`absolute w-[8%] h-[8%] rounded-full \${primaryBgClass} animate-ping\`} style={{ left: '26%', top: '30%', opacity: 0.7, animationDelay: '0.6s' }} />
+    </div>
+  );
+}`,
+    'blocks-wave': `import * as React from "react";
+
+type LoaderProps = {
+  className?: string;
+};
+
+export function BlocksWave({ className = '' }: LoaderProps) {
+  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
+  return (
+    <div className={\`flex items-end gap-1 h-8 \${className}\`}>
+      <style>{\`
+        @keyframes waveBob {
+          0%, 100% { transform: scaleY(0.35); }
+          50% { transform: scaleY(1); }
+        }
+      \`}</style>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <div
+          key={i}
+          className={\`w-3 \${primaryBgClass} rounded-sm\`}
+          style={{
+            height: \`\${[34, 65, 100, 65, 34][i]}%\`,
+            transformOrigin: 'bottom',
+            animation: \`waveBob 1.1s ease-in-out infinite\`,
+            animationDelay: \`\${i * 0.12}s\`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}`,
+    'coffee-cup': `import * as React from "react";
+
+type LoaderProps = {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+};
+
+export function CoffeeCup({ size = 'md', className = '' }: LoaderProps) {
+  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
+  const containerSize = sizeClasses[size] || sizeClasses.md;
+  return (
+    <div className={\`relative flex items-center justify-center \${containerSize} text-zinc-950 dark:text-zinc-50 \${className}\`}>
+      <style>{\`
+        @keyframes steam {
+          0% { transform: translateY(0) translateX(0) scaleX(1); opacity: 0; }
+          30% { opacity: 0.9; }
+          100% { transform: translateY(-200%) translateX(45%) scaleX(1.4); opacity: 0; }
+        }
+      \`}</style>
+      <div className="absolute flex gap-[10%]" style={{ bottom: '56%', width: '42%', height: '16%' }}>
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="w-[16%] h-full rounded-full bg-current"
+            style={{ animation: \`steam \${1.6 + i * 0.3}s ease-in-out infinite\`, animationDelay: \`\${i * 0.45}s\`, marginTop: i === 1 ? '-24%' : 0 }}
+          />
+        ))}
+      </div>
+      <div className="relative" style={{ width: '58%', height: '40%' }}>
+        <div className="absolute bottom-0 rounded-b-md border-[3px] border-current" style={{ left: '6%', width: '70%', height: '100%', borderTop: 'none' }} />
+        <div className="absolute bottom-[12%] rounded-r-full border-[3px] border-current" style={{ right: '0%', width: '24%', height: '26%' }} />
+        <div className="absolute bottom-0 bg-current opacity-35" style={{ left: '6%', width: '70%', height: '16%', borderRadius: '0 0 5px 5px' }} />
+      </div>
+    </div>
+  );
+}`,
+    'progress-slider': `import * as React from "react";
+
+type LoaderProps = {
+  className?: string;
+};
+
+export function ProgressSlider({ className = '' }: LoaderProps) {
+  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
+  return (
+    <div className={\`relative w-24 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800 \${className}\`}>
+      <style>{\`
+        @keyframes slide {
+          0% { transform: translateX(-110%); }
+          100% { transform: translateX(260%); }
+        }
+      \`}</style>
+      <div className={\`absolute top-0 bottom-0 w-1/3 rounded-full \${primaryBgClass}\`} style={{ animation: 'slide 1.4s ease-in-out infinite' }} />
+    </div>
+  );
+}`,
+    'flower-spin': `import * as React from "react";
+
+type LoaderProps = {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+};
+
+export function FlowerSpin({ size = 'md', className = '' }: LoaderProps) {
+  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
+  const containerSize = sizeClasses[size] || sizeClasses.md;
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      className={\`\${containerSize} text-zinc-950 dark:text-zinc-50 \${className}\`}
+      fill="currentColor"
+      style={{
+        transformBox: 'fill-box',
+        transformOrigin: 'center',
+        animation: 'bloom 2.4s ease-in-out infinite',
+      }}
+    >
+      <style>{\`
+        @keyframes bloom {
+          0%, 100% { transform: scale(0.85) rotate(0deg); }
+          50% { transform: scale(1.05) rotate(180deg); }
+        }
+        @keyframes petal {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 1; }
+        }
+      \`}</style>
+      {[0, 60, 120, 180, 240, 300].map((a, i) => (
+        <circle
+          key={a}
+          cx="32"
+          cy="24"
+          r="12"
+          transform={\`rotate(\${a} 32 32)\`}
+          style={{ animation: \`petal 1.2s ease-in-out \${i * 0.15}s infinite\` }}
+        />
+      ))}
+      <circle cx="32" cy="32" r="5" fill="none" stroke="currentColor" strokeWidth="2.5" />
+    </svg>
+  );
+}`,
   };
 
   const getCustomizedManualCode = () => {

@@ -35,6 +35,13 @@ export type LoaderVariant =
   | 'fading-ring'
   | 'morphing-shape'
   | 'dots-chase'
+  | 'atom'
+  | 'solar-system'
+  | 'radar-sweep'
+  | 'blocks-wave'
+  | 'coffee-cup'
+  | 'progress-slider'
+  | 'flower-spin'
 
   
 

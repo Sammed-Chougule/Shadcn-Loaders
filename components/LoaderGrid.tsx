@@ -89,7 +89,7 @@ const LoaderGrid: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Browse Loader Library</h2>
-          <p className="text-zinc-500 dark:text-zinc-400 mt-2">Explore 35+ performant React spinners and animated loading states.</p>
+          <p className="text-zinc-500 dark:text-zinc-400 mt-2">Explore 42+ performant React spinners and animated loading states.</p>
         </div>
         
         <div className="flex flex-wrap gap-4 items-center">

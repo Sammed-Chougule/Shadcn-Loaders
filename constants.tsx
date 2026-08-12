@@ -37,4 +37,10 @@ export const LOADERS: LoaderItem[] = [
   { id: '33', name: 'Fading Ring', variant: 'fading-ring', description: 'Ring that fades in and out.', category: 'abstract' },
   { id: '34', name: 'Morphing Shape', variant: 'morphing-shape', description: 'Shape morphing between different forms.', category: 'complex' },
   { id: '35', name: 'Dots Chase', variant: 'dots-chase', description: 'Dots chasing each other in a circular path.', category: 'simple' },
+  { id: '36', name: 'Atomic Orbit', variant: 'atom', description: 'Electrons circling an atomic nucleus.', category: 'abstract' },
+  { id: '37', name: 'Solar System', variant: 'solar-system', description: 'Planets orbiting a central sun.', category: 'complex' },
+  { id: '38', name: 'Radar Sweep', variant: 'radar-sweep', description: 'Rotating radar beam with target blips.', category: 'abstract' },
+  { id: '39', name: 'Coffee Steam', variant: 'coffee-cup', description: 'Rising steam from a hot cup of coffee.', category: 'complex' },
+  { id: '40', name: 'Progress Slide', variant: 'progress-slider', description: 'Indeterminate sliding progress bar.', category: 'utility' },
+  { id: '41', name: 'Bloom Flower', variant: 'flower-spin', description: 'Spinning flower petals breathing in bloom.', category: 'abstract' },
 ];
