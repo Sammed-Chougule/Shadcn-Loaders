@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+section {
+  scroll-margin-top: 5rem;
+}
+
+@keyframes orbit {
+  0% { transform: rotate(0deg) translateX(20px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(20px) rotate(-360deg); }
+}
+.animate-orbit { animation: orbit 2s linear infinite; }
+
+@keyframes snake {
+  0%, 100% { clip-path: inset(0 0 95% 0); }
+  25% { clip-path: inset(0 95% 0 0); }
+  50% { clip-path: inset(95% 0 0 0); }
+  75% { clip-path: inset(0 0 0 95%); }
+}
+.animate-snake { animation: snake 2s linear infinite; }
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.animate-shimmer { animation: shimmer 2s infinite; }

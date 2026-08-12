@@ -25,7 +25,6 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
   const [color, setColor] = useState<ColorOption>('neutral');
   const [speed, setSpeed] = useState<SpeedOption>('normal');
   const [installStyle, setInstallStyle] = useState<'cli' | 'manual'>('cli');
-  const [cliType, setCliType] = useState<'modular' | 'master'>('modular');
   const [copied, setCopied] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editCode, setEditCode] = useState('');
@@ -145,7 +144,7 @@ export function DoubleBounce({ size = 'md', className = '' }: LoaderProps) {
   return (
     <div className={\`relative \${containerSize} \${className}\`}>
       <div className={\`absolute inset-0 \${primaryBgClass} rounded-full opacity-60 animate-bounce\`} />
-      <div className="absolute inset-0 bg-zinc-400 dark:bg-zinc-600 rounded-full opacity-60 animate-bounce delay-700" />
+      <div className="absolute inset-0 bg-zinc-400 dark:bg-zinc-600 rounded-full opacity-60 animate-bounce [animation-delay:700ms]" />
     </div>
   );
 }`,
@@ -202,9 +201,14 @@ export function Skeleton({ size = 'md', className = '' }: LoaderProps) {
   const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
   const containerSize = sizeClasses[size] || sizeClasses.md;
   return (
-    <div className={\`relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 rounded border border-zinc-200/50 dark:border-zinc-800/50 \${containerSize} \${className}\`}>
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent animate-shimmer -translate-x-full" />
-    </div>
+    <>
+      <style>
+        {\`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }\`}
+      </style>
+      <div className={\`relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 rounded border border-zinc-200/50 dark:border-zinc-800/50 \${containerSize} \${className}\`}>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent animate-shimmer -translate-x-full" />
+      </div>
+    </>
   );
 }`,
     'glow-pulse': `import * as React from "react";
@@ -308,9 +312,14 @@ export function Snake({ size = 'md', className = '' }: LoaderProps) {
   const containerSize = sizeClasses[size] || sizeClasses.md;
   const primaryBorderClass = "border-zinc-950 dark:border-zinc-50";
   return (
-    <div className={\`\${containerSize} border-2 border-zinc-100 dark:border-zinc-900 relative rounded-md overflow-hidden \${className}\`}>
-      <div className={\`absolute inset-0 border-2 \${primaryBorderClass} animate-snake\`} />
-    </div>
+    <>
+      <style>
+        {\`@keyframes snake { 0%, 100% { clip-path: inset(0 0 95% 0); } 25% { clip-path: inset(0 95% 0 0); } 50% { clip-path: inset(95% 0 0 0); } 75% { clip-path: inset(0 0 0 95%); } }\`}
+      </style>
+      <div className={\`\${containerSize} border-2 border-zinc-100 dark:border-zinc-900 relative rounded-md overflow-hidden \${className}\`}>
+        <div className={\`absolute inset-0 border-2 \${primaryBorderClass} animate-snake\`} />
+      </div>
+    </>
   );
 }`,
     'infinity': `import * as React from "react";
@@ -325,18 +334,23 @@ export function Infinity({ size = 'md', className = '' }: LoaderProps) {
   const containerSize = sizeClasses[size] || sizeClasses.md;
   const primaryColorClass = "text-zinc-950 dark:text-zinc-50";
   return (
-    <div className={\`\${containerSize} \${primaryColorClass} \${className}\`}>
-      <svg viewBox="0 0 100 50" className="w-full h-full">
-        <path 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="4" 
-          strokeDasharray="10 5" 
-          className="animate-[shimmer_2s_linear_infinite]"
-          d="M25,25 C25,10 40,10 50,25 C60,40 75,40 75,25 C75,10 60,10 50,25 C40,40 25,40 25,25" 
-        />
-      </svg>
-    </div>
+    <>
+      <style>
+        {\`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }\`}
+      </style>
+      <div className={\`\${containerSize} \${primaryColorClass} \${className}\`}>
+        <svg viewBox="0 0 100 50" className="w-full h-full">
+          <path 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="4" 
+            strokeDasharray="10 5" 
+            className="animate-[shimmer_2s_linear_infinite]"
+            d="M25,25 C25,10 40,10 50,25 C60,40 75,40 75,25 C75,10 60,10 50,25 C40,40 25,40 25,25" 
+          />
+        </svg>
+      </div>
+    </>
   );
 }`,
     'text-shimmer': `import * as React from "react";
@@ -347,9 +361,14 @@ type LoaderProps = {
 
 export function TextShimmer({ className = '' }: LoaderProps) {
   return (
-    <div className={\`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-400 via-zinc-950 dark:via-zinc-50 to-zinc-400 bg-[length:200%_auto] animate-[shimmer_2s_linear_infinite] \${className}\`}>
-      Loading...
-    </div>
+    <>
+      <style>
+        {\`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }\`}
+      </style>
+      <div className={\`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-400 via-zinc-950 dark:via-zinc-50 to-zinc-400 bg-[length:200%_auto] animate-[shimmer_2s_linear_infinite] \${className}\`}>
+        Loading...
+      </div>
+    </>
   );
 }`,
     'grid': `import * as React from "react";
@@ -422,23 +441,28 @@ export function Matrix({ size = 'md', className = '' }: LoaderProps) {
   const containerSize = sizeClasses[size] || sizeClasses.md;
   const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
   return (
-    <div className={\`flex flex-col gap-0.5 overflow-hidden \${containerSize} items-center \${className}\`}>
-      {[...Array(4)].map((_, i) => (
-        <div 
-          key={i} 
-          className="w-full h-1 bg-zinc-100 dark:bg-zinc-900 relative"
-        >
+    <>
+      <style>
+        {\`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }\`}
+      </style>
+      <div className={\`flex flex-col gap-0.5 overflow-hidden \${containerSize} items-center \${className}\`}>
+        {[...Array(4)].map((_, i) => (
           <div 
-            className={\`absolute top-0 bottom-0 w-4 \${primaryBgClass} shadow-[0_0_10px_rgba(0,0,0,0.1)]\`}
-            style={{ 
-              left: '-20%', 
-              animation: 'shimmer 2s linear infinite',
-              animationDelay: \`\${i * 0.5}s\`
-            }}
-          />
-        </div>
-      ))}
-    </div>
+            key={i} 
+            className="w-full h-1 bg-zinc-100 dark:bg-zinc-900 relative"
+          >
+            <div 
+              className={\`absolute top-0 bottom-0 w-4 \${primaryBgClass} shadow-[0_0_10px_rgba(0,0,0,0.1)]\`}
+              style={{ 
+                left: '-20%', 
+                animation: 'shimmer 2s linear infinite',
+                animationDelay: \`\${i * 0.5}s\`
+              }}
+            />
+          </div>
+        ))}
+      </div>
+    </>
   );
 }`,
     'floating-bubble': `import * as React from "react";
@@ -509,8 +533,8 @@ export function ConcentricRings({ size = 'md', className = '' }: LoaderProps) {
   return (
     <div className={\`relative \${containerSize} flex items-center justify-center \${className}\`}>
       <div className="absolute inset-0 rounded-full border-2 border-zinc-200 dark:border-zinc-800 animate-ping" />
-      <div className="absolute inset-2 rounded-full border-2 border-zinc-300 dark:border-zinc-700 animate-ping delay-200" />
-      <div className="absolute inset-4 rounded-full border-2 border-zinc-400 dark:border-zinc-600 animate-pulse delay-400" />
+      <div className="absolute inset-2 rounded-full border-2 border-zinc-300 dark:border-zinc-700 animate-ping [animation-delay:200ms]" />
+      <div className="absolute inset-4 rounded-full border-2 border-zinc-400 dark:border-zinc-600 animate-pulse [animation-delay:400ms]" />
     </div>
   );
 }`,
@@ -813,19 +837,9 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
 
   const getUnifiedCodeContent = () => {
     if (installStyle === 'cli') {
-      const command = cliType === 'modular' 
-        ? `npx shadcn add @shadcnloaders/${loader.variant}`
-        : `npx shadcn add @shadcnloaders/loader`;
-
-      const imprt = cliType === 'modular'
-        ? `import { ${pascalName} } from "@/components/ui/${loader.variant}";`
-        : `import { Loader } from "@/components/ui/loader";`;
-
-      const colorAttr = color !== 'neutral' ? ` color="${color}"` : '';
-      const speedAttr = speed !== 'normal' ? ` speed="${speed}"` : '';
-      const usage = cliType === 'modular'
-        ? `<${pascalName} size="${size}"${colorAttr}${speedAttr} />`
-        : `<Loader variant="${loader.variant}" size="${size}"${colorAttr}${speedAttr} />`;
+      const command = `npx shadcn add @shadcnloaders/loader`;
+      const imprt = `import { Loader } from "@/components/ui/loader";`;
+      const usage = `<Loader variant="${loader.variant}" size="${size}" />`;
 
       return `// 1. Install component via shadcn CLI\n${command}\n\n// 2. Import into your React application\n${imprt}\n\n// 3. Render component preview with active configuration\n${usage}`;
     } else {
@@ -889,7 +903,7 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
             <div className="space-y-1">
               <div className="flex justify-between items-center">
                 <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">Viewport Scale</span>
-                <span className="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 bg-zinc-150/60 dark:bg-zinc-800 px-2 py-0.5 rounded-full uppercase tracking-wider">{size}</span>
+                <span className="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 bg-zinc-100/60 dark:bg-zinc-800 px-2 py-0.5 rounded-full uppercase tracking-wider">{size}</span>
               </div>
               <div className="grid grid-cols-4 gap-0.5 bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg p-0.5">
                 {(['sm', 'md', 'lg', 'xl'] as const).map((sz) => (
@@ -912,7 +926,7 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
             <div className="space-y-1">
               <div className="flex justify-between items-center">
                 <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">Accent Color</span>
-                <span className="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 bg-zinc-150/60 dark:bg-zinc-800 px-2 py-0.5 rounded-full">{activeColor.label}</span>
+                <span className="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 bg-zinc-100/60 dark:bg-zinc-800 px-2 py-0.5 rounded-full">{activeColor.label}</span>
               </div>
               <div className="flex gap-1.5 items-center bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg p-1.5 overflow-x-auto custom-scrollbar">
                 {(Object.keys(colorMap) as ColorOption[]).map((col) => {
@@ -944,7 +958,7 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
             <div className="space-y-1">
               <div className="flex justify-between items-center">
                 <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">Velocity</span>
-                <span className="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 bg-zinc-150/60 dark:bg-zinc-800 px-2 py-0.5 rounded-full capitalize">{speed}</span>
+                <span className="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 bg-zinc-100/60 dark:bg-zinc-800 px-2 py-0.5 rounded-full capitalize">{speed}</span>
               </div>
               <div className="grid grid-cols-3 gap-0.5 bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg p-0.5">
                 {(['slow', 'normal', 'fast'] as const).map((spd) => (
@@ -972,7 +986,7 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
             <div className="flex items-center gap-1.5">
               <Terminal className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
               <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
-                {installStyle === 'cli' ? `components/ui/${loader.variant}.sh` : `components/ui/${loader.variant}.tsx`}
+                {installStyle === 'cli' ? `components/ui/loader.tsx` : `components/ui/${loader.variant}.tsx`}
               </span>
             </div>
 
@@ -1004,29 +1018,7 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
           {/* Dynamic CLI sub selection banner (only visible on CLI) */}
           {installStyle === 'cli' && (
             <div className="px-4 py-1.5 border-b border-zinc-200/40 dark:border-zinc-800/20 bg-zinc-100/30 dark:bg-zinc-900/10 flex items-center justify-between gap-2 text-[10px] shrink-0 select-none">
-              <span className="font-medium text-zinc-500 dark:text-zinc-400">Package Scope</span>
-              <div className="flex bg-zinc-200/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-md p-0.5">
-                <button
-                  onClick={() => setCliType('modular')}
-                  className={`px-2 py-0.5 rounded-md text-[9px] font-bold transition-all ${
-                    cliType === 'modular' 
-                      ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white border border-zinc-200/50 dark:border-transparent shadow-sm' 
-                      : 'text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-200'
-                  }`}
-                >
-                  Single Add
-                </button>
-                <button
-                  onClick={() => setCliType('master')}
-                  className={`px-2 py-0.5 rounded-md text-[9px] font-bold transition-all ${
-                    cliType === 'master' 
-                      ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white border border-zinc-200/50 dark:border-transparent shadow-sm' 
-                      : 'text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-200'
-                  }`}
-                >
-                  Master Add
-                </button>
-              </div>
+              <span className="font-medium text-zinc-500 dark:text-zinc-400">Installs to <code className="font-mono">components/ui/loader.tsx</code></span>
             </div>
           )}
 

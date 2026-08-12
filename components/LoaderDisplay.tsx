@@ -3,7 +3,7 @@ import { LoaderProps, LoaderVariant } from "../types";
 
 export const LoaderDisplay: React.FC<
   LoaderProps & { variant: LoaderVariant }
-> = ({ variant, size = "md", className = "", color = "currentColor" }) => {
+> = ({ variant, size = "md", className = "" }) => {
   const sizeClasses = {
     sm: "w-4 h-4",
     md: "w-8 h-8",
@@ -11,7 +11,7 @@ export const LoaderDisplay: React.FC<
     xl: "w-16 h-16",
   };
 
-  const containerSize = sizeClasses[size];
+  const containerSize = sizeClasses[size] ?? sizeClasses.md;
   const primaryColorClass = "text-zinc-900 dark:text-zinc-50";
   const primaryBgClass = "bg-zinc-900 dark:bg-zinc-50";
   const primaryBorderClass = "border-zinc-900 dark:border-zinc-50";
@@ -53,7 +53,7 @@ export const LoaderDisplay: React.FC<
               key={i}
               className={`w-1 ${primaryBgClass} rounded-full animate-[pulse_1s_ease-in-out_infinite]`}
               style={{
-                height: `${20 + Math.random() * 80}%`,
+                height: `${20 + (i * 15) % 80}%`,
                 animationDelay: `${i * 0.1}s`,
               }}
             />
@@ -74,7 +74,7 @@ export const LoaderDisplay: React.FC<
           <div
             className={`absolute inset-0 ${primaryBgClass} rounded-full opacity-60 animate-bounce`}
           />
-          <div className="absolute inset-0 bg-zinc-400 dark:bg-zinc-600 rounded-full opacity-60 animate-bounce delay-700" />
+          <div className="absolute inset-0 bg-zinc-400 dark:bg-zinc-600 rounded-full opacity-60 animate-bounce [animation-delay:700ms]" />
         </div>
       );
 
@@ -290,20 +290,26 @@ export const LoaderDisplay: React.FC<
         <div
           className={`relative overflow-hidden ${containerSize} border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50 ${className}`}
         >
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className={`absolute ${primaryBgClass} opacity-30 rounded-full animate-bounce`}
-              style={{
-                width: `${Math.random() * 8 + 4}px`,
-                height: `${Math.random() * 8 + 4}px`,
-                left: `${Math.random() * 80 + 10}%`,
-                bottom: "-20%",
-                animationDuration: `${Math.random() * 3 + 2}s`,
-                animationDelay: `${Math.random() * 2}s`,
-              }}
-            />
-          ))}
+          {[...Array(5)].map((_, i) => {
+            const width = [6, 10, 8, 5, 11][i];
+            const left = [15, 35, 55, 75, 45][i];
+            const duration = [2.5, 3.8, 2.1, 4.5, 3.2][i];
+            const delay = [0.2, 1.1, 0.5, 1.8, 0.8][i];
+            return (
+              <div
+                key={i}
+                className={`absolute ${primaryBgClass} opacity-30 rounded-full animate-bounce`}
+                style={{
+                  width: `${width}px`,
+                  height: `${width}px`,
+                  left: `${left}%`,
+                  bottom: "-20%",
+                  animationDuration: `${duration}s`,
+                  animationDelay: `${delay}s`,
+                }}
+              />
+            );
+          })}
         </div>
       );
 
@@ -333,8 +339,8 @@ export const LoaderDisplay: React.FC<
           className={`relative ${containerSize} flex items-center justify-center ${className}`}
         >
           <div className="absolute inset-0 rounded-full border-2 border-zinc-200 dark:border-zinc-800 animate-ping" />
-          <div className="absolute inset-2 rounded-full border-2 border-zinc-300 dark:border-zinc-700 animate-ping delay-200" />
-          <div className="absolute inset-4 rounded-full border-2 border-zinc-400 dark:border-zinc-600 animate-pulse delay-400" />
+          <div className="absolute inset-2 rounded-full border-2 border-zinc-300 dark:border-zinc-700 animate-ping [animation-delay:200ms]" />
+          <div className="absolute inset-4 rounded-full border-2 border-zinc-400 dark:border-zinc-600 animate-pulse [animation-delay:400ms]" />
         </div>
       );
 

@@ -24,7 +24,10 @@
     "shadcn-loaders": "bin/shadcn-loaders.js"
   },
   "files": [
-    "bin"
+    "bin",
+    "registry",
+    "registry.json",
+    "loader.json"
   ],
   "scripts": {
     "dev": "vite",
@@ -39,6 +42,7 @@
     "react-dom": "^19.2.3"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
     "shadcn": "^4.15.0",

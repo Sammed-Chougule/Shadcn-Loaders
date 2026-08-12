@@ -33,8 +33,14 @@ This command installs the loader component into your project.
 
 This package also exposes a shadcn-compatible registry entry for direct use with the shadcn CLI:
 
-```bash
-npx shadcn add @shadcnloaders/loader
+```json
+{
+  "name": "@shadcnloaders",
+  "homepage": "https://shadcnloaders.com",
+  "url": "https://shadcnloaders.com/r/{name}.json",
+  "description": "A public registry of shadcn-inspired animated loaders and loading states.",
+  "logo": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='#0f172a'/><circle cx='12' cy='12' r='5' fill='#f59e0b'/><circle cx='12' cy='12' r='2.2' fill='#ffffff'/></svg>"
+}
 ```
 
 Registry files are available at:
