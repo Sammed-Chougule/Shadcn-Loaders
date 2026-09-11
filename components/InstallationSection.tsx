@@ -1,21 +1,47 @@
 
 import React, { useState } from 'react';
 
+const EXAMPLE_VARIANT = 'classic-spinner';
+
+function copyToClipboard(text: string): Promise<boolean> {
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text).then(() => true).catch(() => false);
+  }
+  return new Promise((resolve) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      resolve(true);
+    } catch {
+      resolve(false);
+    } finally {
+      document.body.removeChild(ta);
+    }
+  });
+}
+
 const InstallationSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'npm' | 'yarn' | 'pnpm' | 'bun'>('npm');
   const [copied, setCopied] = useState(false);
 
   const commands = {
-    npm: 'npx shadcn@latest add @shadcnloaders/loader',
-    yarn: 'yarn dlx shadcn@latest add @shadcnloaders/loader',
-    pnpm: 'pnpm dlx shadcn@latest add @shadcnloaders/loader',
-    bun: 'bunx --bun shadcn@latest add @shadcnloaders/loader'
+    npm: `npx shadcn@latest add @shadcnloaders/${EXAMPLE_VARIANT}`,
+    yarn: `yarn dlx shadcn@latest add @shadcnloaders/${EXAMPLE_VARIANT}`,
+    pnpm: `pnpm dlx shadcn@latest add @shadcnloaders/${EXAMPLE_VARIANT}`,
+    bun: `bunx --bun shadcn@latest add @shadcnloaders/${EXAMPLE_VARIANT}`
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(commands[activeTab]);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    const ok = await copyToClipboard(commands[activeTab]);
+    if (ok) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -42,7 +68,7 @@ const InstallationSection: React.FC = () => {
             {commands[activeTab]}
           </code>
           <button 
-            onClick={copyToClipboard}
+            onClick={handleCopy}
             className="p-2 hover:bg-zinc-800 rounded-lg transition-colors border border-transparent active:border-zinc-700 shrink-0"
           >
             {copied ? (
@@ -57,11 +83,11 @@ const InstallationSection: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className="mt-6 flex items-center justify-center gap-2 text-xs text-zinc-400 dark:text-zinc-500 bg-zinc-100/50 dark:bg-zinc-900/30 py-2 rounded-full border border-zinc-200/50 dark:border-zinc-800 max-w-sm mx-auto transition-colors">
+      <div className="mt-6 flex items-center justify-center gap-2 text-xs text-zinc-400 dark:text-zinc-500 bg-zinc-100/50 dark:bg-zinc-900/30 py-2 rounded-full border border-zinc-200/50 dark:border-zinc-800 max-w-md mx-auto transition-colors">
         <svg className="w-4 h-4 text-zinc-900 dark:text-zinc-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        <span>This adds the component to <code>components/ui</code> automatically.</span>
+        <span>Replace <code className="font-mono bg-zinc-200/50 dark:bg-zinc-800/50 px-1 rounded">{`<name>`}</code> with any loader variant. Each installs to <code className="font-mono bg-zinc-200/50 dark:bg-zinc-800/50 px-1 rounded">components/ui</code>.</span>
       </div>
     </div>
   );

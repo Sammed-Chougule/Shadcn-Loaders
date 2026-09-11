@@ -43,14 +43,14 @@ export type LoaderVariant =
   | 'progress-slider'
   | 'flower-spin'
 
-  
+
 
 export interface LoaderItem {
   id: string;
   name: string;
   variant: LoaderVariant;
   description: string;
-  category: 'simple' | 'complex' | 'abstract' | 'utility';
+  category: 'spinners' | 'dots' | 'bars' | 'rings' | 'shapes' | 'other';
 }
 
 export interface LoaderProps {

@@ -1,19 +1,19 @@
 # Shadcn Loaders
 
-A comprehensive collection of modern React loaders and spinners inspired by shadcn/ui. Built with Tailwind CSS and optimized for both dark and light themes.
+A collection of 42 pure-CSS React loaders and spinners. Zero dependencies, sub-1KB each, fully customizable with Tailwind CSS.
 
 ## Landing Page
 
 ![Shadcn Loaders Landing Page](./public/image.png)
 
-The ultimate collection of **shadcn loader** components. Optimized for performance, fully customizable with Tailwind CSS, and easy CLI installation.
+## Features
 
-### Key Highlights
-- **Free Open Source Shadcn Loader Library**
-- **Modern loaders for your React project**
-- Clean, modern loader UI for React projects
-- Easy CLI setup with a single command
-- Fully customizable with Tailwind CSS
+- **42 loaders** across 6 categories: Spinners, Dots, Bars, Rings, Shapes, Other
+- **Zero dependencies** — pure CSS, no runtime cost
+- **Sub-1KB** per component
+- **Accessible** — `role="status"` and `prefers-reduced-motion` on all variants
+- **Tailwind CSS** customizable — color, speed, size via utility classes
+- **One CLI command per component** — installs directly to `components/ui`
 
 ## NPM Package
 
@@ -21,24 +21,26 @@ The ultimate collection of **shadcn loader** components. Optimized for performan
 
 ## Installation
 
-Add a loader component to your project with the shadcn registry syntax:
+Install any loader individually with the shadcn CLI:
 
 ```bash
-npx shadcn add @shadcnloaders/loader
+npx shadcn add @shadcnloaders/classic-spinner
+npx shadcn add @shadcnloaders/dots-pulse
+npx shadcn add @shadcnloaders/wave-loader
 ```
 
-This command installs the loader component into your project.
+Replace the variant name with any of the 42 available loaders.
 
 ## shadcn Registry
 
-This package also exposes a shadcn-compatible registry entry for direct use with the shadcn CLI:
+This package exposes a shadcn-compatible registry entry for direct use with the shadcn CLI:
 
 ```json
 {
   "name": "@shadcnloaders",
   "homepage": "https://shadcnloaders.com",
   "url": "https://shadcnloaders.com/r/{name}.json",
-  "description": "A public registry of shadcn-inspired animated loaders and loading states.",
+  "description": "42 pure-CSS animated loaders and loading states.",
   "logo": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='#0f172a'/><circle cx='12' cy='12' r='5' fill='#f59e0b'/><circle cx='12' cy='12' r='2.2' fill='#ffffff'/></svg>"
 }
 ```
@@ -47,14 +49,6 @@ Registry files are available at:
 - [registry.json](registry.json)
 - [loader.json](loader.json)
 - [registry/loader.tsx](registry/loader.tsx)
-
-## Features
-
-- **Easy CLI setup**: Add loader components with a single npx command.
-- **Shadcn-style design**: Clean, modern loader UI for React projects.
-- **Tailwind-ready**: Style and customize quickly with utility classes.
-
-
 
 ## License
 

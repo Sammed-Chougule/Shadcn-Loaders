@@ -944,6 +944,82 @@ export const LoaderDisplay: React.FC<
         </svg>
       );
 
+    case "pulse-wave":
+      return (
+        <div className={`${containerSize} relative flex items-center justify-center ${className}`}>
+          <style>{`
+            @keyframes pulseWaveExpand {
+              0% { transform: scale(0.5); opacity: 1; }
+              100% { transform: scale(2); opacity: 0; }
+            }
+          `}</style>
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="absolute inset-0 rounded-full border-2 border-zinc-900 dark:border-zinc-50"
+              style={{
+                animation: 'pulseWaveExpand 1.5s ease-out infinite',
+                animationDelay: `${i * 0.5}s`,
+              }}
+            />
+          ))}
+          <div className={`w-1/4 h-1/4 rounded-full ${primaryBgClass}`} />
+        </div>
+      );
+
+    case "bouncing-ball":
+      return (
+        <div className={`${containerSize} relative flex items-end justify-center pb-1 ${className}`}>
+          <style>{`
+            @keyframes bounceBall {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-80%); }
+            }
+          `}</style>
+          <div
+            className={`w-1/4 h-1/4 rounded-full ${primaryBgClass}`}
+            style={{ animation: 'bounceBall 0.6s ease-in-out infinite' }}
+          />
+          <div className="absolute bottom-1 w-1/2 h-0.5 bg-zinc-200 dark:bg-zinc-800 rounded-full" />
+        </div>
+      );
+
+    case "dna-helix":
+      return (
+        <div className={`${containerSize} relative flex items-center justify-center ${className}`}>
+          <style>{`
+            @keyframes dnaRotate {
+              0% { transform: rotateY(0deg); }
+              100% { transform: rotateY(360deg); }
+            }
+          `}</style>
+          <div className="relative w-full h-full" style={{ animation: 'dnaRotate 2s linear infinite', transformStyle: 'preserve-3d' }}>
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className={`absolute w-2 h-2 rounded-full ${primaryBgClass}`}
+                style={{
+                  top: `${10 + i * 20}%`,
+                  left: `${50 + Math.sin(i * 1.2) * 30}%`,
+                  transform: `translateX(-50%)`,
+                }}
+              />
+            ))}
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div
+                key={`b-${i}`}
+                className="absolute w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700"
+                style={{
+                  top: `${10 + i * 20}%`,
+                  left: `${50 - Math.sin(i * 1.2) * 30}%`,
+                  transform: `translateX(-50%)`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      );
+
     default:
       return null;
   }

@@ -24,7 +24,6 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
   const [size, setSize] = useState<SizingOption>('lg');
   const [color, setColor] = useState<ColorOption>('neutral');
   const [speed, setSpeed] = useState<SpeedOption>('normal');
-  const [installStyle, setInstallStyle] = useState<'cli' | 'manual'>('cli');
   const [copied, setCopied] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editCode, setEditCode] = useState('');
@@ -35,8 +34,19 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join("");
 
-  const triggerCopy = (text: string) => {
-    navigator.clipboard.writeText(text);
+  const triggerCopy = async (text: string) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      try { await navigator.clipboard.writeText(text); } catch { /* fallback below */ }
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch { /* noop */ }
+      document.body.removeChild(ta);
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -1014,6 +1024,112 @@ export function FlowerSpin({ size = 'md', className = '' }: LoaderProps) {
     </svg>
   );
 }`,
+    'pulse-wave': `import * as React from "react";
+
+type LoaderProps = {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+};
+
+export function PulseWave({ size = 'md', className = '' }: LoaderProps) {
+  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
+  const containerSize = sizeClasses[size] || sizeClasses.md;
+  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
+  return (
+    <div className={\`\${containerSize} relative flex items-center justify-center \${className}\`}>
+      <style>{\`
+        @keyframes pulseWaveExpand {
+          0% { transform: scale(0.5); opacity: 1; }
+          100% { transform: scale(2); opacity: 0; }
+        }
+      \`}</style>
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          className="absolute inset-0 rounded-full border-2 border-zinc-950 dark:border-zinc-50"
+          style={{
+            animation: 'pulseWaveExpand 1.5s ease-out infinite',
+            animationDelay: \`\${i * 0.5}s\`,
+          }}
+        />
+      ))}
+      <div className={\`w-1/4 h-1/4 rounded-full \${primaryBgClass}\`} />
+    </div>
+  );
+}`,
+    'bouncing-ball': `import * as React from "react";
+
+type LoaderProps = {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+};
+
+export function BouncingBall({ size = 'md', className = '' }: LoaderProps) {
+  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
+  const containerSize = sizeClasses[size] || sizeClasses.md;
+  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
+  return (
+    <div className={\`\${containerSize} relative flex items-end justify-center pb-1 \${className}\`}>
+      <style>{\`
+        @keyframes bounceBall {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-80%); }
+        }
+      \`}</style>
+      <div
+        className={\`w-1/4 h-1/4 rounded-full \${primaryBgClass}\`}
+        style={{ animation: 'bounceBall 0.6s ease-in-out infinite' }}
+      />
+      <div className="absolute bottom-1 w-1/2 h-0.5 bg-zinc-200 dark:bg-zinc-800 rounded-full" />
+    </div>
+  );
+}`,
+    'dna-helix': `import * as React from "react";
+
+type LoaderProps = {
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  className?: string;
+};
+
+export function DnaHelix({ size = 'md', className = '' }: LoaderProps) {
+  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
+  const containerSize = sizeClasses[size] || sizeClasses.md;
+  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
+  return (
+    <div className={\`\${containerSize} relative flex items-center justify-center \${className}\`}>
+      <style>{\`
+        @keyframes dnaRotate {
+          0% { transform: rotateY(0deg); }
+          100% { transform: rotateY(360deg); }
+        }
+      \`}</style>
+      <div className="relative w-full h-full" style={{ animation: 'dnaRotate 2s linear infinite', transformStyle: 'preserve-3d' }}>
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div
+            key={i}
+            className={\`absolute w-2 h-2 rounded-full \${primaryBgClass}\`}
+            style={{
+              top: \`\${10 + i * 20}%\`,
+              left: \`\${50 + Math.sin(i * 1.2) * 30}%\`,
+              transform: \`translateX(-50%)\`,
+            }}
+          />
+        ))}
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div
+            key={\`b-\${i}\`}
+            className="absolute w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700"
+            style={{
+              top: \`\${10 + i * 20}%\`,
+              left: \`\${50 - Math.sin(i * 1.2) * 30}%\`,
+              transform: \`translateX(-50%)\`,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}`,
   };
 
   const getCustomizedManualCode = () => {
@@ -1084,15 +1200,7 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
   `;
 
   const getUnifiedCodeContent = () => {
-    if (installStyle === 'cli') {
-      const command = `npx shadcn add @shadcnloaders/loader`;
-      const imprt = `import { Loader } from "@/components/ui/loader";`;
-      const usage = `<Loader variant="${loader.variant}" size="${size}" />`;
-
-      return `// 1. Install component via shadcn CLI\n${command}\n\n// 2. Import into your React application\n${imprt}\n\n// 3. Render component preview with active configuration\n${usage}`;
-    } else {
-      return getCustomizedManualCode();
-    }
+    return getCustomizedManualCode();
   };
 
   const unifiedCode = getUnifiedCodeContent();
@@ -1230,45 +1338,14 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
         {/* Unified Code block (CLI/Manual tabs + copy snippet) */}
         <div className="border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 flex flex-col h-[320px] sm:h-[380px] lg:h-[440px] xl:h-[480px] mt-4 shadow-sm text-zinc-800 dark:text-zinc-200">
           {/* Terminal Code Header */}
-          <div className="px-4 py-2.5 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/40 flex items-center justify-between gap-2 shrink-0">
+          <div className="px-4 py-2.5 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/40 flex items-center gap-2 shrink-0">
             <div className="flex items-center gap-1.5">
               <Terminal className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
               <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
-                {installStyle === 'cli' ? `components/ui/loader.tsx` : `components/ui/${loader.variant}.tsx`}
+                components/ui/{loader.variant}.tsx
               </span>
             </div>
-
-            {/* CLI vs Standalone tabs */}
-            <div className="flex bg-zinc-200/50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg p-0.5 text-xs">
-              <button
-                onClick={() => setInstallStyle('cli')}
-                className={`px-2.5 py-0.5 rounded-md text-[10px] font-semibold transition-all ${
-                  installStyle === 'cli' 
-                    ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 shadow-sm border border-zinc-200/50 dark:border-transparent' 
-                    : 'text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-200'
-                }`}
-              >
-                shadcn CLI
-              </button>
-              <button
-                onClick={() => setInstallStyle('manual')}
-                className={`px-2.5 py-0.5 rounded-md text-[10px] font-semibold transition-all ${
-                  installStyle === 'manual' 
-                    ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 shadow-sm border border-zinc-200/50 dark:border-transparent' 
-                    : 'text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-200'
-                }`}
-              >
-                Standalone
-              </button>
-            </div>
           </div>
-
-          {/* Dynamic CLI sub selection banner (only visible on CLI) */}
-          {installStyle === 'cli' && (
-            <div className="px-4 py-1.5 border-b border-zinc-200/40 dark:border-zinc-800/20 bg-zinc-100/30 dark:bg-zinc-900/10 flex items-center justify-between gap-2 text-[10px] shrink-0 select-none">
-              <span className="font-medium text-zinc-500 dark:text-zinc-400">Installs to <code className="font-mono">components/ui/loader.tsx</code></span>
-            </div>
-          )}
 
           {/* Code Area Workspace */}
           <div className="flex-1 p-4 overflow-auto font-mono text-[11px] sm:text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed pr-2 select-text bg-white dark:bg-zinc-950/40 scrollbar-thin">
