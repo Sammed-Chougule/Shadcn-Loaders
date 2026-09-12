@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { Copy, Check } from 'lucide-react';
 import LoaderGrid from './components/LoaderGrid.tsx';
 import { LoaderDisplay } from './components/LoaderDisplay.tsx';
+import { Terminal } from './components/ui/terminal';
 import { LOADERS } from './constants.tsx';
 import { LoaderVariant } from './types.ts';
 
@@ -142,48 +143,68 @@ const App: React.FC = () => {
   );
 
   const Hero = () => (
-    <header ref={heroRef} className="relative pt-32 pb-16 px-6 overflow-hidden">
+    <header ref={heroRef} className="relative pt-24 pb-6 px-6 overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[400px] bg-zinc-50 dark:bg-zinc-900/10 blur-[120px] rounded-full -z-10 transition-colors duration-500" />
       
-      <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-black to-zinc-600 dark:from-white dark:to-zinc-500 leading-tight flex flex-wrap items-center justify-center gap-x-1">
-          <span>Modern l</span>
-          <span className="inline-flex items-center justify-center w-[0.75em] h-[0.75em] relative top-[0.05em]"><LoaderDisplay variant="fading-ring" size="lg" className="!w-full !h-full" /></span>
-          <span>aders for</span>
-          <br className="w-full" />
-          <span className="text-black dark:text-white">your React project.</span>
-        </h1>    
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left: Text Content */}
+          <div className="text-center lg:text-left">
+            <h1 className="text-6xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-black to-zinc-600 dark:from-white dark:to-zinc-500 leading-tight">
+              M
+              <span className="inline-flex items-center justify-center w-[0.8em] h-[0.8em] relative top-[0.05em] mx-[0.02em] align-baseline">
+                <LoaderDisplay variant="fading-ring" size="lg" className="!w-full !h-full" />
+              </span>
+              dern loaders every frontend deserve.
+            </h1>    
 
-        <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-          42 pure-CSS loaders. Zero dependencies. Sub-1KB each. <code className="text-sm bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded font-mono">role="status"</code> and <code className="text-sm bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded font-mono">prefers-reduced-motion</code> on every variant.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-          <a 
-            href="https://github.com/Sammed-Chougule/Shadcn-Loaders"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-900 dark:bg-zinc-100 border border-zinc-800 dark:border-zinc-200 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors group"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 250" width="20" height="20" className="flex-shrink-0 invert dark:invert-0">
-              <rect x="0" y="0" width="256" height="250" fill="#FFFFFF"/>
-              <path fill="#161614" d="M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46c6.397 1.185 8.746-2.777 8.746-6.158c0-3.052-.12-13.135-.174-23.83c-35.61 7.742-43.124-15.103-43.124-15.103c-5.823-14.795-14.213-18.73-14.213-18.73c-11.613-7.944.876-7.78.876-7.78c12.853.902 19.621 13.19 19.621 13.19c11.417 19.568 29.945 13.911 37.249 10.64c1.149-8.272 4.466-13.92 8.127-17.116c-28.431-3.236-58.318-14.212-58.318-63.258c0-13.975 5-25.394 13.188-34.358c-1.329-3.224-5.71-16.242 1.24-33.874c0 0 10.749-3.44 35.21 13.121c10.21-2.836 21.16-4.258 32.038-4.307c10.878.049 21.837 1.47 32.066 4.307c24.431-16.56 35.165-13.12 35.165-13.12c6.967 17.63 2.584 30.65 1.255 33.873c8.207 8.964 13.173 20.383 13.173 34.358c0 49.163-29.944 59.988-58.447 63.157c4.591 3.972 8.682 11.762 8.682 23.704c0 17.126-.148 30.91-.148 35.126c0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002C256 57.307 198.691 0 128.001 0m-80.06 182.34c-.282.636-1.283.827-2.194.39c-.929-.417-1.45-1.284-1.15-1.922c.276-.655 1.279-.838 2.205-.399c.93.418 1.46 1.293 1.139 1.931m6.296 5.618c-.61.566-1.804.303-2.614-.591c-.837-.892-.994-2.086-.375-2.66c.63-.566 1.787-.301 2.626.591c.838.903 1 2.088.363 2.66m4.32 7.188c-.785.545-2.067.034-2.86-1.104c-.784-1.138-.784-2.503.017-3.05c.795-.547 2.058-.055 2.861 1.075c.782 1.157.782 2.522-.019 3.08m7.304 8.325c-.701.774-2.196.566-3.29-.49c-1.119-1.032-1.43-2.496-.726-3.27c.71-.776 2.213-.558 3.315.49c1.11 1.03 1.45 2.505.701 3.27m9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033c-1.448-.439-2.395-1.613-2.103-2.626c.301-1.01 1.747-1.484 3.207-1.028c1.446.436 2.396 1.602 2.095 2.622m10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95c-1.53.034-2.769-.82-2.786-1.86c0-1.065 1.202-1.932 2.733-1.958c1.522-.03 2.768.818 2.768 1.868m10.555-.405c.182 1.03-.875 2.088-2.387 2.37c-1.485.271-2.861-.365-3.05-1.386c-.184-1.056.893-2.114 2.376-2.387c1.514-.263 2.868.356 3.061 1.403" />
-            </svg>
-            <span className="text-sm font-semibold text-zinc-100 dark:text-zinc-900 border-l border-zinc-700 dark:border-zinc-300 pl-3">
-              {stars !== null ? stars : '...'} Stars
-            </span>
-          </a>
-          <button 
-            onClick={copyCliCommand}
-            className="flex items-center gap-2 text-sm bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl font-mono text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
-          >
-            <span>npx shadcn add @shadcnloaders/loader</span>
-            {copiedCli ? (
-              <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            ) : (
-              <Copy className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />
-            )}
-          </button>
+            <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+              42 pure-CSS loaders. Install via CLI or copy-paste into your project. Zero dependencies, fully accessible.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+              <a 
+                href="https://github.com/Sammed-Chougule/Shadcn-Loaders"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-zinc-900 dark:bg-zinc-100 border border-zinc-800 dark:border-zinc-200 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors group"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 250" width="20" height="20" className="flex-shrink-0 invert dark:invert-0">
+                  <rect x="0" y="0" width="256" height="250" fill="#FFFFFF"/>
+                  <path fill="#161614" d="M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46c6.397 1.185 8.746-2.777 8.746-6.158c0-3.052-.12-13.135-.174-23.83c-35.61 7.742-43.124-15.103-43.124-15.103c-5.823-14.795-14.213-18.73-14.213-18.73c-11.613-7.944.876-7.78.876-7.78c12.853.902 19.621 13.19 19.621 13.19c11.417 19.568 29.945 13.911 37.249 10.64c1.149-8.272 4.466-13.92 8.127-17.116c-28.431-3.236-58.318-14.212-58.318-63.258c0-13.975 5-25.394 13.188-34.358c-1.329-3.224-5.71-16.242 1.24-33.874c0 0 10.749-3.44 35.21 13.121c10.21-2.836 21.16-4.258 32.038-4.307c10.878.049 21.837 1.47 32.066 4.307c24.431-16.56 35.165-13.12 35.165-13.12c6.967 17.63 2.584 30.65 1.255 33.873c8.207 8.964 13.173 20.383 13.173 34.358c0 49.163-29.944 59.988-58.447 63.157c4.591 3.972 8.682 11.762 8.682 23.704c0 17.126-.148 30.91-.148 35.126c0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002C256 57.307 198.691 0 128.001 0m-80.06 182.34c-.282.636-1.283.827-2.194.39c-.929-.417-1.45-1.284-1.15-1.922c.276-.655 1.279-.838 2.205-.399c.93.418 1.46 1.293 1.139 1.931m6.296 5.618c-.61.566-1.804.303-2.614-.591c-.837-.892-.994-2.086-.375-2.66c.63-.566 1.787-.301 2.626.591c.838.903 1 2.088.363 2.66m4.32 7.188c-.785.545-2.067.034-2.86-1.104c-.784-1.138-.784-2.503.017-3.05c.795-.547 2.058-.055 2.861 1.075c.782 1.157.782 2.522-.019 3.08m7.304 8.325c-.701.774-2.196.566-3.29-.49c-1.119-1.032-1.43-2.496-.726-3.27c.71-.776 2.213-.558 3.315.49c1.11 1.03 1.45 2.505.701 3.27m9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033c-1.448-.439-2.395-1.613-2.103-2.626c.301-1.01 1.747-1.484 3.207-1.028c1.446.436 2.396 1.602 2.095 2.622m10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95c-1.53.034-2.769-.82-2.786-1.86c0-1.065 1.202-1.932 2.733-1.958c1.522-.03 2.768.818 2.768 1.868m10.555-.405c.182 1.03-.875 2.088-2.387 2.37c-1.485.271-2.861-.365-3.05-1.386c-.184-1.056.893-2.114 2.376-2.387c1.514-.263 2.868.356 3.061 1.403" />
+                </svg>
+                <span className="text-sm font-semibold text-zinc-100 dark:text-zinc-900 border-l border-zinc-700 dark:border-zinc-300 pl-3">
+                  {stars !== null ? stars : '...'} Stars
+                </span>
+              </a>
+              <button 
+                onClick={copyCliCommand}
+                className="flex items-center gap-2 text-sm bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-4 py-3 rounded-xl font-mono text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+              >
+                <span>npx shadcn add @shadcnloaders/loader</span>
+                {copiedCli ? (
+                  <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                ) : (
+                  <Copy className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Right: Terminal */}
+          <div className="hidden lg:block">
+            <Terminal
+              commands={[
+                "npx shadcn add @shadcnloaders/classic-spinner",
+              ]}
+              outputs={{
+                0: ["✔ Done. Installed classic-spinner."],
+              }}
+              typingSpeed={45}
+              delayBetweenCommands={1000}
+              enableSound={false}
+            />
+          </div>
         </div>
       </div>
 
@@ -240,23 +261,13 @@ const App: React.FC = () => {
               <a href="https://ui.shadcn.com" target="_blank" rel="noopener noreferrer" className="text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white text-sm transition-colors">Shadcn UI</a>
             </div>
           </div>
-
-          <a 
-            href="https://www.buymeacoffee.com/sammedchougule" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:opacity-80 transition-opacity shrink-0"
-          >
-            <img 
-              src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" 
-              alt="Buy Me A Coffee" 
-              style={{ height: '32px', width: 'auto' }} 
-            />
-          </a>
         </div>
         <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-zinc-100 dark:border-zinc-900 text-center space-y-3">
           <p className="text-zinc-600 dark:text-zinc-400 text-sm font-medium">
             Created by <span className="text-zinc-900 dark:text-zinc-50 font-bold">Sammed-Chougule</span> — Building beautiful web experiences with precision.
+          </p>
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm">
+            Liked my work? <a href="https://www.buymeacoffee.com/sammedchougule" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline font-medium">Buy me a coffee</a>
           </p>
           <p className="text-zinc-400 dark:text-zinc-500 text-xs">
             © {new Date().getFullYear()} Shadcn Loaders. Premium UI components for React.
