@@ -4,7 +4,8 @@ A collection of 42 pure-CSS React loaders and spinners. Zero dependencies, sub-1
 
 ## Landing Page
 
-![Shadcn Loaders Landing Page](./public/image.png)
+<img width="1901" height="931" alt="image" src="https://github.com/user-attachments/assets/b4cb27e2-bfcb-4b87-bf71-588da533d499" />
+
 
 ## Features
 
