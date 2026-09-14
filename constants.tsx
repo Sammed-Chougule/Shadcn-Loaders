@@ -44,4 +44,7 @@ export const LOADERS: LoaderItem[] = [
   { id: '40', name: 'Coffee Steam', variant: 'coffee-cup', description: 'Rising cup steam.', category: 'other' },
   { id: '41', name: 'Progress Slide', variant: 'progress-slider', description: 'Sliding progress bar.', category: 'other' },
   { id: '42', name: 'Blocks Wave', variant: 'blocks-wave', description: 'Sequential block wave.', category: 'other' },
+  { id: '43', name: 'Bouncing Ball', variant: 'bouncing-ball', description: 'Bouncing ball on ground.', category: 'dots' },
+  { id: '44', name: 'Walking Steps', variant: 'walking-steps', description: 'Alternating leg walk cycle.', category: 'other' },
+  { id: '45', name: 'Corner Chase', variant: 'corner-chase', description: 'Two dots chasing around corners.', category: 'dots' },
 ];

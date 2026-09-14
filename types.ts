@@ -42,6 +42,9 @@ export type LoaderVariant =
   | 'coffee-cup'
   | 'progress-slider'
   | 'flower-spin'
+  | 'bouncing-ball'
+  | 'walking-steps'
+  | 'corner-chase'
 
 
 

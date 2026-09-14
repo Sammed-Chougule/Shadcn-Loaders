@@ -1020,6 +1020,119 @@ export const LoaderDisplay: React.FC<
         </div>
       );
 
+    case "bouncing-ball":
+      return (
+        <div className={`relative ${className}`} style={{ aspectRatio: 2 }}>
+          <style>{`
+            @keyframes loader-ball-ground {
+              to { background-position: -125% 100%; }
+            }
+            @keyframes loader-ball-bounce {
+              0%, 2% { bottom: 0%; }
+              50% { bottom: 55%; }
+              98%, to { bottom: 0.1%; }
+            }
+          `}</style>
+          <div
+            className="absolute bottom-0 left-0 right-0 h-[3px]"
+            style={{
+              background: "linear-gradient(90deg, currentColor 50%, transparent 0) -25% 100% / 50% 3px repeat-x border-box",
+              animation: "loader-ball-ground 0.75s linear infinite",
+            }}
+          />
+          <div
+            className="absolute bottom-0 w-[18%] aspect-square rounded-full bg-current"
+            style={{
+              left: "41%",
+              animation: "loader-ball-bounce 0.75s cubic-bezier(0, 900, 1, 900) infinite",
+            }}
+          />
+        </div>
+      );
+
+    case "walking-steps":
+      return (
+        <div className={`relative ${containerSize} ${className}`}>
+          <style>{`
+            @keyframes loader-walk-leg-1 {
+              0%, 10% { transform: translateY(0); background-position: 0 calc(var(--s, 0) * -100%), calc(var(--s, 0) * 100%) 50%; }
+              33% { transform: translateY(-20%); background-position: 0 calc(var(--s, 0) * -100%), calc(var(--s, 0) * 100%) 50%; }
+              66% { transform: translateY(-20%); background-position: 0 calc(var(--s, 0) * -100%), calc(var(--s, 0) * 100% + 100%) 50%; }
+              90%, 100% { transform: translateY(0); background-position: 0 calc(var(--s, 0) * -100%), calc(var(--s, 0) * 100% + 100%) 50%; }
+            }
+            @keyframes loader-walk-leg-2 {
+              0%, 10% { transform: translateY(0); background-position: 0 calc(-1 * -100%), calc(-1 * 100%) 50%; }
+              33% { transform: translateY(20%); background-position: 0 calc(-1 * -100%), calc(-1 * 100%) 50%; }
+              66% { transform: translateY(20%); background-position: 0 calc(-1 * -100%), calc(-1 * 100% + 100%) 50%; }
+              90%, 100% { transform: translateY(0); background-position: 0 calc(-1 * -100%), calc(-1 * 100% + 100%) 50%; }
+            }
+          `}</style>
+          {/* Leg 1 */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(currentColor 0 0) 0 0 / 100% calc(100% / 3), repeating-linear-gradient(90deg, currentColor 0 25%, transparent 0 50%) 0 50% / calc(4 * 100% / 3) calc(100% / 3)",
+              backgroundRepeat: "no-repeat",
+              animation: "loader-walk-leg-1 2s infinite",
+            }}
+          />
+          {/* Leg 2 */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(currentColor 0 0) 0 -100% / 100% calc(100% / 3), repeating-linear-gradient(90deg, currentColor 0 25%, transparent 0 50%) -100% 50% / calc(4 * 100% / 3) calc(100% / 3)",
+              backgroundRepeat: "no-repeat",
+              animation: "loader-walk-leg-2 2s infinite",
+            }}
+          />
+        </div>
+      );
+
+    case "corner-chase":
+      return (
+        <div className={`relative ${containerSize} ${className}`}>
+          <style>{`
+            @keyframes loader-chase-1 {
+              0% { inset: 0 35% 35% 0; }
+              12.5% { inset: 0 35% 0 0; }
+              25% { inset: 35% 35% 0 0; }
+              37.5% { inset: 35% 0 0 0; }
+              50% { inset: 35% 0 0 35%; }
+              62.5% { inset: 0 0 0 35%; }
+              75% { inset: 0 0 35% 35%; }
+              87.5% { inset: 0 0 35% 0; }
+              100% { inset: 0 35% 35% 0; }
+            }
+            @keyframes loader-chase-2 {
+              0% { inset: 0 35% 35% 0; }
+              12.5% { inset: 0 35% 0 0; }
+              25% { inset: 35% 35% 0 0; }
+              37.5% { inset: 35% 0 0 0; }
+              50% { inset: 35% 0 0 35%; }
+              62.5% { inset: 0 0 0 35%; }
+              75% { inset: 0 0 35% 35%; }
+              87.5% { inset: 0 0 35% 0; }
+              100% { inset: 0 35% 35% 0; }
+            }
+          `}</style>
+          <div
+            className="absolute rounded-full"
+            style={{
+              boxShadow: "0 0 0 3px inset currentColor",
+              animation: "loader-chase-1 2.5s infinite",
+            }}
+          />
+          <div
+            className="absolute rounded-full"
+            style={{
+              boxShadow: "0 0 0 3px inset currentColor",
+              animation: "loader-chase-2 2.5s infinite",
+              animationDelay: "-1.25s",
+            }}
+          />
+        </div>
+      );
+
     default:
       return null;
   }
