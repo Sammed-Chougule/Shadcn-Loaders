@@ -1,9 +1,11 @@
 import React from "react";
 import { LoaderProps, LoaderVariant } from "../types";
 
-export const LoaderDisplay: React.FC<
-  LoaderProps & { variant: LoaderVariant }
-> = ({ variant, size = "md", className = "" }) => {
+export const LoaderDisplay = React.memo(function LoaderDisplay({
+  variant,
+  size = "md",
+  className = "",
+}: LoaderProps & { variant: LoaderVariant }) {
   const sizeClasses = {
     sm: "w-4 h-4",
     md: "w-8 h-8",
@@ -1020,36 +1022,6 @@ export const LoaderDisplay: React.FC<
         </div>
       );
 
-    case "bouncing-ball":
-      return (
-        <div className={`relative ${className}`} style={{ aspectRatio: 2 }}>
-          <style>{`
-            @keyframes loader-ball-ground {
-              to { background-position: -125% 100%; }
-            }
-            @keyframes loader-ball-bounce {
-              0%, 2% { bottom: 0%; }
-              50% { bottom: 55%; }
-              98%, to { bottom: 0.1%; }
-            }
-          `}</style>
-          <div
-            className="absolute bottom-0 left-0 right-0 h-[3px]"
-            style={{
-              background: "linear-gradient(90deg, currentColor 50%, transparent 0) -25% 100% / 50% 3px repeat-x border-box",
-              animation: "loader-ball-ground 0.75s linear infinite",
-            }}
-          />
-          <div
-            className="absolute bottom-0 w-[18%] aspect-square rounded-full bg-current"
-            style={{
-              left: "41%",
-              animation: "loader-ball-bounce 0.75s cubic-bezier(0, 900, 1, 900) infinite",
-            }}
-          />
-        </div>
-      );
-
     case "walking-steps":
       return (
         <div className={`relative ${containerSize} ${className}`}>
@@ -1136,4 +1108,4 @@ export const LoaderDisplay: React.FC<
     default:
       return null;
   }
-};
+});

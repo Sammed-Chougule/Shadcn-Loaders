@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Copy, Check, Terminal, Sliders, Laptop, Pencil, X } from 'lucide-react';
 import { LoaderItem } from '../types';
 import { LoaderDisplay } from './LoaderDisplay';
@@ -20,40 +20,9 @@ const colorMap = {
   indigo: { name: 'indigo', textClass: 'text-indigo-600 dark:text-indigo-400', bgClass: 'bg-indigo-600 dark:bg-indigo-400', bgBadge: 'bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300', hex: '4f46e5', label: 'Deep Indigo' }
 };
 
-export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) => {
-  const [size, setSize] = useState<SizingOption>('lg');
-  const [color, setColor] = useState<ColorOption>('neutral');
-  const [speed, setSpeed] = useState<SpeedOption>('normal');
-  const [copied, setCopied] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [editCode, setEditCode] = useState('');
-
-  // Capitalize name (e.g. classic-spinner -> ClassicSpinner)
-  const pascalName = loader.variant
-    .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join("");
-
-  const triggerCopy = async (text: string) => {
-    if (navigator.clipboard && window.isSecureContext) {
-      try { await navigator.clipboard.writeText(text); } catch { /* fallback below */ }
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch { /* noop */ }
-      document.body.removeChild(ta);
-    }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  // Manual Component implementation code mappings
+// Manual Component implementation code mappings
   const rawImplementationCodes: Record<string, string> = {
-    'classic-spinner': `import * as React from "react";
+  'classic-spinner': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -67,7 +36,7 @@ export function ClassicSpinner({ size = 'md', className = '' }: LoaderProps) {
     <div className={\`\${containerSize} border-2 border-zinc-200 dark:border-zinc-800 border-t-zinc-950 dark:border-t-zinc-50 rounded-full animate-spin \${className}\`} />
   );
 }`,
-    'dots-pulse': `import * as React from "react";
+  'dots-pulse': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -88,7 +57,7 @@ export function DotsPulse({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'pulse-ring': `import * as React from "react";
+  'pulse-ring': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -105,7 +74,7 @@ export function PulseRing({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'bars': `import * as React from "react";
+  'bars': `import * as React from "react";
 
 type LoaderProps = {
   className?: string;
@@ -125,7 +94,7 @@ export function Bars({ className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'square-spin': `import * as React from "react";
+  'square-spin': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -140,7 +109,7 @@ export function SquareSpin({ size = 'md', className = '' }: LoaderProps) {
     <div className={\`\${containerSize} \${primaryBgClass} animate-[spin_2s_linear_infinite] rounded-sm shadow-sm \${className}\`} />
   );
 }`,
-    'double-bounce': `import * as React from "react";
+  'double-bounce': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -158,7 +127,7 @@ export function DoubleBounce({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'circular-progress': `import * as React from "react";
+  'circular-progress': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -180,7 +149,7 @@ export function CircularProgress({ size = 'md', className = '' }: LoaderProps) {
     </svg>
   );
 }`,
-    'wave-loader': `import * as React from "react";
+  'wave-loader': `import * as React from "react";
 
 type LoaderProps = {
   className?: string;
@@ -200,7 +169,7 @@ export function WaveLoader({ className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'skeleton': `import * as React from "react";
+  'skeleton': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -221,7 +190,7 @@ export function Skeleton({ size = 'md', className = '' }: LoaderProps) {
     </>
   );
 }`,
-    'glow-pulse': `import * as React from "react";
+  'glow-pulse': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -236,7 +205,7 @@ export function GlowPulse({ size = 'md', className = '' }: LoaderProps) {
     <div className={\`\${primaryBgClass} rounded-full shadow-[0_0_20px_rgba(0,0,0,0.15)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] animate-pulse \${containerSize} \${className}\`} />
   );
 }`,
-    'clock': `import * as React from "react";
+  'clock': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -253,7 +222,7 @@ export function Clock({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'hourglass': `import * as React from "react";
+  'hourglass': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -270,7 +239,7 @@ export function Hourglass({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'gear': `import * as React from "react";
+  'gear': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -290,7 +259,7 @@ export function Gear({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'orbit': `import * as React from "react";
+  'orbit': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -310,7 +279,7 @@ export function Orbit({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'snake': `import * as React from "react";
+  'snake': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -332,7 +301,7 @@ export function Snake({ size = 'md', className = '' }: LoaderProps) {
     </>
   );
 }`,
-    'infinity': `import * as React from "react";
+  'infinity': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -363,7 +332,7 @@ export function Infinity({ size = 'md', className = '' }: LoaderProps) {
     </>
   );
 }`,
-    'text-shimmer': `import * as React from "react";
+  'text-shimmer': `import * as React from "react";
 
 type LoaderProps = {
   className?: string;
@@ -381,7 +350,7 @@ export function TextShimmer({ className = '' }: LoaderProps) {
     </>
   );
 }`,
-    'grid': `import * as React from "react";
+  'grid': `import * as React from "react";
 
 type LoaderProps = {
   className?: string;
@@ -401,7 +370,7 @@ export function Grid({ className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'heartbeat': `import * as React from "react";
+  'heartbeat': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -420,7 +389,7 @@ export function Heartbeat({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'loader-dna': `import * as React from "react";
+  'loader-dna': `import * as React from "react";
 
 type LoaderProps = {
   className?: string;
@@ -439,7 +408,7 @@ export function LoaderDna({ className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'matrix': `import * as React from "react";
+  'matrix': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -475,7 +444,7 @@ export function Matrix({ size = 'md', className = '' }: LoaderProps) {
     </>
   );
 }`,
-    'floating-bubble': `import * as React from "react";
+  'floating-bubble': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -511,7 +480,7 @@ export function FloatingBubble({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'hex-spin': `import * as React from "react";
+  'hex-spin': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -530,7 +499,7 @@ export function HexSpin({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'concentric-rings': `import * as React from "react";
+  'concentric-rings': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -548,7 +517,7 @@ export function ConcentricRings({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'dots-rotate': `import * as React from "react";
+  'dots-rotate': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -572,7 +541,7 @@ export function DotsRotate({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'morphing-hex': `import * as React from "react";
+  'morphing-hex': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -600,7 +569,7 @@ export function MorphingHex({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'ripple-pulse': `import * as React from "react";
+  'ripple-pulse': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -630,7 +599,7 @@ export function RipplePulse({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'orbiting-spheres': `import * as React from "react";
+  'orbiting-spheres': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -683,7 +652,7 @@ export function OrbitingSpheres({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'paired-revolution': `import * as React from "react";
+  'paired-revolution': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -739,7 +708,7 @@ export function PairedRevolution({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'eyes-gaze': `import * as React from "react";
+  'eyes-gaze': `import * as React from "react";
 
 type LoaderProps = {
   className?: string;
@@ -776,7 +745,7 @@ export function EyesGaze({ className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'atom': `import * as React from "react";
+  'atom': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -813,7 +782,7 @@ export function Atom({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'solar-system': `import * as React from "react";
+  'solar-system': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -856,7 +825,7 @@ export function SolarSystem({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'radar-sweep': `import * as React from "react";
+  'radar-sweep': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -892,7 +861,7 @@ export function RadarSweep({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'blocks-wave': `import * as React from "react";
+  'blocks-wave': `import * as React from "react";
 
 type LoaderProps = {
   className?: string;
@@ -923,7 +892,7 @@ export function BlocksWave({ className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'coffee-cup': `import * as React from "react";
+  'coffee-cup': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -959,7 +928,7 @@ export function CoffeeCup({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'progress-slider': `import * as React from "react";
+  'progress-slider': `import * as React from "react";
 
 type LoaderProps = {
   className?: string;
@@ -979,7 +948,7 @@ export function ProgressSlider({ className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'flower-spin': `import * as React from "react";
+  'flower-spin': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -1024,7 +993,7 @@ export function FlowerSpin({ size = 'md', className = '' }: LoaderProps) {
     </svg>
   );
 }`,
-    'pulse-wave': `import * as React from "react";
+  'pulse-wave': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -1057,7 +1026,7 @@ export function PulseWave({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'bouncing-ball': `import * as React from "react";
+  'bouncing-ball': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -1084,7 +1053,7 @@ export function BouncingBall({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-    'dna-helix': `import * as React from "react";
+  'dna-helix': `import * as React from "react";
 
 type LoaderProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -1130,49 +1099,85 @@ export function DnaHelix({ size = 'md', className = '' }: LoaderProps) {
     </div>
   );
 }`,
-  };
+};
 
-  const getCustomizedManualCode = () => {
-    let baseCode = rawImplementationCodes[loader.variant] || `import * as React from "react";
+const pascalNameFor = (variant: string) =>
+  variant
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join("");
+
+const buildCustomizedCode = (
+  variant: string,
+  size: SizingOption,
+  color: ColorOption
+): string => {
+  const pascalName = pascalNameFor(variant);
+  let baseCode = rawImplementationCodes[variant] || `import * as React from "react";
 import { Loader } from "./loader";
 
 export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
-  return <Loader {...props} variant="${loader.variant}" />;
+  return <Loader {...props} variant="${variant}" />;
 }`;
 
-    // Dynamic Sizing Replacement
-    baseCode = baseCode.replace(/size = 'md'/g, `size = '${size}'`);
+  // Dynamic Sizing Replacement
+  baseCode = baseCode.replace(/size = 'md'/g, `size = '${size}'`);
 
-    // Dynamic Color Replacement
-    if (color !== 'neutral') {
-      const activeColor = colorMap[color];
-      // Target multiple standard black-accent class pairs
-      baseCode = baseCode.replace(/bg-zinc-900/g, `bg-${activeColor.name}-500`);
-      baseCode = baseCode.replace(/bg-zinc-950/g, `bg-${activeColor.name}-600`);
-      baseCode = baseCode.replace(/dark:bg-zinc-50/g, `dark:bg-${activeColor.name}-400`);
-      
-      baseCode = baseCode.replace(/text-zinc-900/g, `text-${activeColor.name}-500`);
-      baseCode = baseCode.replace(/text-zinc-950/g, `text-${activeColor.name}-600`);
-      baseCode = baseCode.replace(/dark:text-zinc-50/g, `dark:text-${activeColor.name}-400`);
-      
-      baseCode = baseCode.replace(/border-zinc-950/g, `border-${activeColor.name}-600`);
-      baseCode = baseCode.replace(/dark:border-zinc-50/g, `dark:border-${activeColor.name}-400`);
+  // Dynamic Color Replacement
+  if (color !== 'neutral') {
+    const activeColor = colorMap[color];
+    // Target multiple standard black-accent class pairs
+    baseCode = baseCode.replace(/bg-zinc-900/g, `bg-${activeColor.name}-500`);
+    baseCode = baseCode.replace(/bg-zinc-950/g, `bg-${activeColor.name}-600`);
+    baseCode = baseCode.replace(/dark:bg-zinc-50/g, `dark:bg-${activeColor.name}-400`);
 
-      baseCode = baseCode.replace(/border-t-zinc-950/g, `border-t-${activeColor.name}-600`);
-      baseCode = baseCode.replace(/dark:border-t-zinc-50/g, `dark:border-t-${activeColor.name}-400`);
+    baseCode = baseCode.replace(/text-zinc-900/g, `text-${activeColor.name}-500`);
+    baseCode = baseCode.replace(/text-zinc-950/g, `text-${activeColor.name}-600`);
+    baseCode = baseCode.replace(/dark:text-zinc-50/g, `dark:text-${activeColor.name}-400`);
 
-      baseCode = baseCode.replace(/stroke-zinc-950/g, `stroke-${activeColor.name}-600`);
-      baseCode = baseCode.replace(/dark:stroke-zinc-50/g, `dark:stroke-${activeColor.name}-400`);
+    baseCode = baseCode.replace(/border-zinc-950/g, `border-${activeColor.name}-600`);
+    baseCode = baseCode.replace(/dark:border-zinc-50/g, `dark:border-${activeColor.name}-400`);
+
+    baseCode = baseCode.replace(/border-t-zinc-950/g, `border-t-${activeColor.name}-600`);
+    baseCode = baseCode.replace(/dark:border-t-zinc-50/g, `dark:border-t-${activeColor.name}-400`);
+
+    baseCode = baseCode.replace(/stroke-zinc-950/g, `stroke-${activeColor.name}-600`);
+    baseCode = baseCode.replace(/dark:stroke-zinc-50/g, `dark:stroke-${activeColor.name}-400`);
+  }
+
+  return baseCode;
+};
+
+export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) => {
+  const [size, setSize] = useState<SizingOption>('lg');
+  const [color, setColor] = useState<ColorOption>('neutral');
+  const [speed, setSpeed] = useState<SpeedOption>('normal');
+  const [copied, setCopied] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editCode, setEditCode] = useState('');
+
+  const triggerCopy = async (text: string) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      try { await navigator.clipboard.writeText(text); } catch { /* fallback below */ }
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch { /* noop */ }
+      document.body.removeChild(ta);
     }
-
-    return baseCode;
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const activeColor = colorMap[color];
   const cssNamespace = `arena-panel-${loader.variant}`;
 
   // Custom live CSS injection matching custom options
-  const arenaStyleMarkup = `
+  const arenaStyleMarkup = useMemo(() => `
     .${cssNamespace} .bg-zinc-900, 
     .${cssNamespace} .bg-zinc-950,
     .${cssNamespace} .dark\\:bg-zinc-50 { 
@@ -1197,13 +1202,12 @@ export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
     }
     ${speed === 'slow' ? `.${cssNamespace} * { animation-duration: 2.2s !important; }` : ''}
     ${speed === 'fast' ? `.${cssNamespace} * { animation-duration: 0.45s !important; }` : ''}
-  `;
+  `, [cssNamespace, color, speed, activeColor]);
 
-  const getUnifiedCodeContent = () => {
-    return getCustomizedManualCode();
-  };
-
-  const unifiedCode = getUnifiedCodeContent();
+  const unifiedCode = useMemo(
+    () => buildCustomizedCode(loader.variant, size, color),
+    [loader.variant, size, color]
+  );
 
   return (
     <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-sm flex flex-col h-full">

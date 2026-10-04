@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { LOADERS } from '../constants.tsx';
 import { LoaderDisplay } from './LoaderDisplay.tsx';
 import { LoaderItem } from '../types.ts';
 import { LoaderDetailPanel } from './LoaderDetailPanel.tsx';
 import { Copy, Check, Pencil, Terminal } from 'lucide-react';
+
+const categories = ['all', 'spinners', 'dots', 'bars', 'rings', 'shapes', 'other'] as const;
+const categoryLabels: Record<string, string> = {
+  all: 'All',
+  spinners: 'Spinners',
+  dots: 'Dots',
+  bars: 'Bars',
+  rings: 'Rings',
+  shapes: 'Shapes',
+  other: 'Other',
+};
 
 function copyToClipboard(text: string): Promise<boolean> {
   if (navigator.clipboard && window.isSecureContext) {
@@ -27,7 +38,12 @@ function copyToClipboard(text: string): Promise<boolean> {
   });
 }
 
-const LoaderCard: React.FC<{ loader: LoaderItem; onClick: () => void }> = ({ loader, onClick }) => {
+type LoaderCardProps = {
+  loader: LoaderItem;
+  onSelect: (loader: LoaderItem) => void;
+};
+
+const LoaderCard = React.memo(({ loader, onSelect }: LoaderCardProps) => {
   const [copied, setCopied] = useState<'code' | 'cli' | null>(null);
 
   const copyCode = async () => {
@@ -50,7 +66,7 @@ const LoaderCard: React.FC<{ loader: LoaderItem; onClick: () => void }> = ({ loa
 
   return (
     <article 
-      onClick={onClick}
+      onClick={() => onSelect(loader)}
       className="group cursor-pointer relative bg-white dark:bg-zinc-900 border rounded-lg p-8 transition-all duration-200 flex flex-col items-center justify-between h-64 overflow-hidden border-zinc-200 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-md"
     >
       <div className="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
@@ -58,7 +74,7 @@ const LoaderCard: React.FC<{ loader: LoaderItem; onClick: () => void }> = ({ loa
           <button 
             onClick={(e) => {
               e.stopPropagation();
-              onClick();
+              onSelect(loader);
             }}
             className="p-1.5 hover:bg-amber-100 dark:hover:bg-amber-900/30 rounded-md border border-zinc-200 dark:border-zinc-700 active:scale-95 transition-colors"
             aria-label={`Edit ${loader.name}`}
@@ -121,41 +137,23 @@ const LoaderCard: React.FC<{ loader: LoaderItem; onClick: () => void }> = ({ loa
       </div>
     </article>
   );
-};
+});
 
-type LoaderGridProps = {
-  search: string;
-  onSearchChange: (value: string) => void;
-};
-
-const LoaderGrid: React.FC<LoaderGridProps> = ({ search, onSearchChange }) => {
+const LoaderGrid: React.FC = () => {
   const [filter, setFilter] = useState<string>('all');
   const [selectedLoader, setSelectedLoader] = useState<LoaderItem | null>(null);
 
-  const categories = ['all', 'spinners', 'dots', 'bars', 'rings', 'shapes', 'other'] as const;
-  const categoryLabels: Record<string, string> = {
-    all: 'All',
-    spinners: 'Spinners',
-    dots: 'Dots',
-    bars: 'Bars',
-    rings: 'Rings',
-    shapes: 'Shapes',
-    other: 'Other',
-  };
+  const filteredLoaders = useMemo(() => LOADERS.filter(loader =>
+    filter === 'all' || loader.category === filter
+  ), [filter]);
 
-  const filteredLoaders = LOADERS.filter(loader => {
-    const matchesCategory = filter === 'all' || loader.category === filter;
-    const matchesSearch = loader.name.toLowerCase().includes(search.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
-  const handleLoaderClick = (loader: LoaderItem) => {
+  const handleLoaderClick = useCallback((loader: LoaderItem) => {
     setSelectedLoader(loader);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setSelectedLoader(null);
-  };
+  }, []);
 
   return (
     <section id="explore" className="py-20 max-w-7xl mx-auto px-6">
@@ -188,12 +186,12 @@ const LoaderGrid: React.FC<LoaderGridProps> = ({ search, onSearchChange }) => {
             <LoaderCard 
               key={loader.id} 
               loader={loader} 
-              onClick={() => handleLoaderClick(loader)}
+              onSelect={handleLoaderClick}
             />
           ))
         ) : (
           <div className="col-span-full py-20 text-center text-zinc-400 dark:text-zinc-600 bg-zinc-50 dark:bg-zinc-900/50 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
-            No loaders found matching your search.
+            No loaders found in this category.
           </div>
         )}
       </div>
