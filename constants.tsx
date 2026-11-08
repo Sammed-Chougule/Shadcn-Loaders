@@ -47,4 +47,9 @@ export const LOADERS: LoaderItem[] = [
   { id: '43', name: 'Bouncing Ball', variant: 'bouncing-ball', description: 'Bouncing ball on ground.', category: 'dots' },
   { id: '44', name: 'Walking Steps', variant: 'walking-steps', description: 'Alternating leg walk cycle.', category: 'other' },
   { id: '45', name: 'Corner Chase', variant: 'corner-chase', description: 'Two dots chasing around corners.', category: 'dots' },
+  { id: '46', name: "Newton's Cradle", variant: 'newtons-cradle', description: 'Swinging momentum balls.', category: 'other' },
+  { id: '47', name: 'Comet Trail', variant: 'comet-trail', description: 'Orbiting comet with fading tail.', category: 'rings' },
+  { id: '48', name: 'Liquid Fill', variant: 'liquid-fill', description: 'Rising liquid with waves.', category: 'shapes' },
+  { id: '49', name: 'Battery Charge', variant: 'battery-charge', description: 'Charging battery fill.', category: 'other' },
+  { id: '50', name: 'Domino Fall', variant: 'domino-fall', description: 'Toppling domino chain.', category: 'other' },
 ];

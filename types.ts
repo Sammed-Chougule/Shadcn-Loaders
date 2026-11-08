@@ -47,6 +47,11 @@ export type LoaderVariant =
   | 'dna-helix'
   | 'walking-steps'
   | 'corner-chase'
+  | 'newtons-cradle'
+  | 'comet-trail'
+  | 'liquid-fill'
+  | 'battery-charge'
+  | 'domino-fall'
 
 
 

@@ -1,6 +1,6 @@
 # Shadcn Loaders
 
-A collection of 42 pure-CSS React loaders and spinners. Zero dependencies, sub-1KB each, fully customizable with Tailwind CSS.
+A collection of 50 pure-CSS React loaders and spinners. Zero dependencies, sub-1KB each, fully customizable with Tailwind CSS.
 
 ## Landing Page
 
@@ -9,7 +9,7 @@ A collection of 42 pure-CSS React loaders and spinners. Zero dependencies, sub-1
 
 ## Features
 
-- **42 loaders** across 6 categories: Spinners, Dots, Bars, Rings, Shapes, Other
+- **50 loaders** across 6 categories: Spinners, Dots, Bars, Rings, Shapes, Other
 - **Zero dependencies** — pure CSS, no runtime cost
 - **Sub-1KB** per component
 - **Accessible** — `role="status"` and `prefers-reduced-motion` on all variants
@@ -30,7 +30,7 @@ npx shadcn add @shadcnloaders/dots-pulse
 npx shadcn add @shadcnloaders/wave-loader
 ```
 
-Replace the variant name with any of the 42 available loaders.
+Replace the variant name with any of the 50 available loaders.
 
 ## shadcn Registry
 
@@ -41,7 +41,7 @@ This package exposes a shadcn-compatible registry entry for direct use with the 
   "name": "@shadcnloaders",
   "homepage": "https://shadcnloaders.com",
   "url": "https://shadcnloaders.com/r/{name}.json",
-  "description": "42 pure-CSS animated loaders and loading states.",
+  "description": "50 pure-CSS animated loaders and loading states.",
   "logo": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='#0f172a'/><circle cx='12' cy='12' r='5' fill='#f59e0b'/><circle cx='12' cy='12' r='2.2' fill='#ffffff'/></svg>"
 }
 ```

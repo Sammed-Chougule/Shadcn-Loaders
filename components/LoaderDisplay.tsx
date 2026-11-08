@@ -1105,6 +1105,197 @@ export const LoaderDisplay = React.memo(function LoaderDisplay({
         </div>
       );
 
+    case "newtons-cradle":
+      return (
+        <div
+          className={`relative ${containerSize} ${primaryColorClass} ${className}`}
+        >
+          <style>{`
+            @keyframes loader-cradle-left {
+              0% {
+                transform: rotate(0deg);
+                animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+              }
+              25% {
+                transform: rotate(25deg);
+                animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+              }
+              50%, 100% { transform: rotate(0deg); }
+            }
+            @keyframes loader-cradle-right {
+              0% { transform: rotate(0deg); }
+              50% {
+                transform: rotate(0deg);
+                animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+              }
+              75% {
+                transform: rotate(-25deg);
+                animation-timing-function: cubic-bezier(0.55, 0.085, 0.68, 0.53);
+              }
+              100% { transform: rotate(0deg); }
+            }
+          `}</style>
+          <div className="absolute top-[12%] left-[18%] right-[18%] h-px rounded-full bg-current opacity-40" />
+          <div className="absolute top-[12%] bottom-[10%] left-[18%] right-[18%] flex">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="relative flex h-full flex-1 flex-col items-center"
+                style={{
+                  transformOrigin: "top center",
+                  animation:
+                    i === 0
+                      ? "loader-cradle-left 1.8s linear infinite"
+                      : i === 4
+                        ? "loader-cradle-right 1.8s linear infinite"
+                        : undefined,
+                }}
+              >
+                <div className="w-px flex-1 bg-current opacity-40" />
+                <div className="w-[88%] aspect-square rounded-full bg-current" />
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case "comet-trail":
+      return (
+        <div
+          className={`relative ${containerSize} ${primaryColorClass} ${className}`}
+        >
+          <style>{`
+            @keyframes loader-comet-spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}</style>
+          <div
+            className="absolute inset-0"
+            style={{ animation: "loader-comet-spin 1.5s linear infinite" }}
+          >
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, transparent 0deg, transparent 235deg, currentColor 360deg)",
+                WebkitMask:
+                  "radial-gradient(farthest-side, transparent 82%, #000 83%)",
+                mask: "radial-gradient(farthest-side, transparent 82%, #000 83%)",
+              }}
+            />
+            <div className="absolute top-[6%] left-1/2 w-[16%] aspect-square -translate-x-1/2 rounded-full bg-current" />
+            <div className="absolute top-[6%] left-1/2 w-[34%] aspect-square -translate-x-1/2 rounded-full bg-current opacity-25 blur-[2px]" />
+          </div>
+        </div>
+      );
+
+    case "liquid-fill":
+      return (
+        <div
+          className={`relative overflow-hidden ${containerSize} rounded-xl border-2 border-zinc-900/60 dark:border-zinc-50/60 ${primaryColorClass} ${className}`}
+        >
+          <style>{`
+            @keyframes loader-liquid-spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+            @keyframes loader-liquid-level {
+              0%, 100% { top: 58%; }
+              50% { top: 34%; }
+            }
+          `}</style>
+          <div
+            className="absolute left-[-50%] w-[200%] h-[200%] rounded-[44%] bg-current"
+            style={{
+              animation:
+                "loader-liquid-spin 3.6s linear infinite, loader-liquid-level 2.8s ease-in-out infinite",
+            }}
+          />
+          <div
+            className="absolute left-[-50%] w-[200%] h-[200%] rounded-[42%] bg-current opacity-30"
+            style={{
+              animation:
+                "loader-liquid-spin 5s linear infinite reverse, loader-liquid-level 2.8s ease-in-out infinite",
+            }}
+          />
+        </div>
+      );
+
+    case "battery-charge":
+      return (
+        <div
+          className={`relative ${containerSize} ${primaryColorClass} ${className}`}
+        >
+          <style>{`
+            @keyframes loader-battery-fill {
+              0%, 8% { transform: scaleX(0); }
+              55%, 82% { transform: scaleX(1); }
+              92%, 100% { transform: scaleX(1); opacity: 0; }
+            }
+          `}</style>
+          <svg viewBox="0 0 64 32" fill="none" className="w-full h-full">
+            <rect
+              x="3"
+              y="7"
+              width="50"
+              height="18"
+              rx="4"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              opacity="0.35"
+            />
+            <rect
+              x="56"
+              y="12"
+              width="5"
+              height="8"
+              rx="2"
+              fill="currentColor"
+              opacity="0.35"
+            />
+            <rect
+              x="6.5"
+              y="10.5"
+              width="43"
+              height="11"
+              rx="2"
+              fill="currentColor"
+              style={{
+                transformBox: "fill-box",
+                transformOrigin: "left center",
+                animation: "loader-battery-fill 2.4s ease-in-out infinite",
+              }}
+            />
+          </svg>
+        </div>
+      );
+
+    case "domino-fall":
+      return (
+        <div
+          className={`flex items-end justify-center gap-[6%] ${containerSize} ${primaryColorClass} ${className}`}
+        >
+          <style>{`
+            @keyframes loader-domino {
+              0%, 100% { transform: rotate(0deg); }
+              20% { transform: rotate(72deg); }
+              38% { transform: rotate(72deg); }
+              56% { transform: rotate(0deg); }
+            }
+          `}</style>
+          {[0, 1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="w-[11%] h-[64%] rounded-[2px] bg-current origin-bottom-right"
+              style={{
+                animation: `loader-domino 1.9s ease-in-out ${i * 0.14}s infinite`,
+              }}
+            />
+          ))}
+        </div>
+      );
+
     default:
       return null;
   }

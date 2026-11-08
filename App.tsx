@@ -89,7 +89,7 @@ const Hero = React.memo(({ stars, copiedCli, onCopyCli }: HeroProps) => (
           </h1>    
 
           <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-10 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-            45 pure-CSS loaders. Install via CLI or copy-paste into your project. Zero dependencies, fully accessible.
+            50 pure-CSS loaders. Install via CLI or copy-paste into your project. Zero dependencies, fully accessible.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
@@ -177,7 +177,7 @@ const Footer = React.memo(() => (
           <span className="font-bold text-zinc-900 dark:text-zinc-50">Shadcn Loaders</span>
         </div>
         <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-xs">
-          45 pure-CSS loader components. Zero dependencies, fully customizable with Tailwind CSS.
+          50 pure-CSS loader components. Zero dependencies, fully customizable with Tailwind CSS.
         </p>
       </div>
       
