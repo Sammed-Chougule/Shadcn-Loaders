@@ -1,29 +1,8 @@
 
 import React, { useState } from 'react';
+import { copyToClipboard } from '../lib/utils';
 
 const EXAMPLE_VARIANT = 'classic-spinner';
-
-function copyToClipboard(text: string): Promise<boolean> {
-  if (navigator.clipboard && window.isSecureContext) {
-    return navigator.clipboard.writeText(text).then(() => true).catch(() => false);
-  }
-  return new Promise((resolve) => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.left = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    try {
-      document.execCommand('copy');
-      resolve(true);
-    } catch {
-      resolve(false);
-    } finally {
-      document.body.removeChild(ta);
-    }
-  });
-}
 
 const InstallationSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'npm' | 'yarn' | 'pnpm' | 'bun'>('npm');

@@ -3,7 +3,8 @@ import { LOADERS } from '../constants.tsx';
 import { LoaderDisplay } from './LoaderDisplay.tsx';
 import { LoaderItem } from '../types.ts';
 import { LoaderDetailPanel } from './LoaderDetailPanel.tsx';
-import { Copy, Check, Pencil, Terminal } from 'lucide-react';
+import { Copy, Check, Pencil, Terminal, Search } from 'lucide-react';
+import { copyToClipboard } from '../lib/utils.ts';
 
 const categories = ['all', 'spinners', 'dots', 'bars', 'rings', 'shapes', 'other'] as const;
 const categoryLabels: Record<string, string> = {
@@ -15,28 +16,6 @@ const categoryLabels: Record<string, string> = {
   shapes: 'Shapes',
   other: 'Other',
 };
-
-function copyToClipboard(text: string): Promise<boolean> {
-  if (navigator.clipboard && window.isSecureContext) {
-    return navigator.clipboard.writeText(text).then(() => true).catch(() => false);
-  }
-  return new Promise((resolve) => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.left = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    try {
-      document.execCommand('copy');
-      resolve(true);
-    } catch {
-      resolve(false);
-    } finally {
-      document.body.removeChild(ta);
-    }
-  });
-}
 
 type LoaderCardProps = {
   loader: LoaderItem;
@@ -65,13 +44,13 @@ const LoaderCard = React.memo(({ loader, onSelect }: LoaderCardProps) => {
   };
 
   return (
-    <article 
+    <article
       onClick={() => onSelect(loader)}
       className="group cursor-pointer relative bg-white dark:bg-zinc-900 border rounded-lg p-8 transition-all duration-200 flex flex-col items-center justify-between h-64 overflow-hidden border-zinc-200 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-md"
     >
       <div className="absolute top-3 right-3 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
         <div className="relative group/tooltip">
-          <button 
+          <button
             onClick={(e) => {
               e.stopPropagation();
               onSelect(loader);
@@ -85,9 +64,9 @@ const LoaderCard = React.memo(({ loader, onSelect }: LoaderCardProps) => {
             Edit
           </span>
         </div>
-        
+
         <div className="relative group/tooltip">
-          <button 
+          <button
             onClick={(e) => {
               e.stopPropagation();
               copyCli(e);
@@ -107,7 +86,7 @@ const LoaderCard = React.memo(({ loader, onSelect }: LoaderCardProps) => {
         </div>
 
         <div className="relative group/tooltip">
-          <button 
+          <button
             onClick={(e) => {
               e.stopPropagation();
               copyCode();
@@ -130,7 +109,7 @@ const LoaderCard = React.memo(({ loader, onSelect }: LoaderCardProps) => {
       <div className="flex-1 flex items-center justify-center scale-125 group-hover:scale-135 transition-transform duration-200" aria-hidden="true">
         <LoaderDisplay variant={loader.variant} size="lg" className="text-zinc-900 dark:text-zinc-50" />
       </div>
-      
+
       <div className="w-full mt-4">
         <h3 className="font-semibold text-zinc-900 dark:text-zinc-50 group-hover:text-black dark:group-hover:text-white transition-colors truncate">{loader.name}</h3>
         <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{loader.description}</p>
@@ -141,11 +120,18 @@ const LoaderCard = React.memo(({ loader, onSelect }: LoaderCardProps) => {
 
 const LoaderGrid: React.FC = () => {
   const [filter, setFilter] = useState<string>('all');
+  const [search, setSearch] = useState('');
   const [selectedLoader, setSelectedLoader] = useState<LoaderItem | null>(null);
 
-  const filteredLoaders = useMemo(() => LOADERS.filter(loader =>
-    filter === 'all' || loader.category === filter
-  ), [filter]);
+  const filteredLoaders = useMemo(() => {
+    return LOADERS.filter((loader) => {
+      const matchesCategory = filter === 'all' || loader.category === filter;
+      const matchesSearch = loader.name.toLowerCase().includes(search.toLowerCase()) ||
+        loader.description.toLowerCase().includes(search.toLowerCase()) ||
+        loader.variant.toLowerCase().includes(search.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [filter, search]);
 
   const handleLoaderClick = useCallback((loader: LoaderItem) => {
     setSelectedLoader(loader);
@@ -160,10 +146,23 @@ const LoaderGrid: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Browse Loader Library</h2>
-          <p className="text-zinc-500 dark:text-zinc-400 mt-2">Explore 45 performant React spinners and animated loading states.</p>
+          <p className="text-zinc-500 dark:text-zinc-400 mt-2">Explore {LOADERS.length} performant React spinners and animated loading states.</p>
         </div>
-        
+
         <div className="flex flex-wrap gap-4 items-center">
+          {/* Search */}
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+            <input
+              type="search"
+              placeholder="Search loaders…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors"
+            />
+          </div>
+
+          {/* Category filters */}
           <div className="flex flex-wrap bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg p-1 gap-0.5" role="group" aria-label="Filter loaders by category">
             {categories.map((cat) => (
               <button
@@ -183,25 +182,25 @@ const LoaderGrid: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
         {filteredLoaders.length > 0 ? (
           filteredLoaders.map((loader) => (
-            <LoaderCard 
-              key={loader.id} 
-              loader={loader} 
+            <LoaderCard
+              key={loader.id}
+              loader={loader}
               onSelect={handleLoaderClick}
             />
           ))
         ) : (
           <div className="col-span-full py-20 text-center text-zinc-400 dark:text-zinc-600 bg-zinc-50 dark:bg-zinc-900/50 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
-            No loaders found in this category.
+            <p className="text-sm">No loaders match your filters.</p>
           </div>
         )}
       </div>
 
       {selectedLoader && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
           onClick={closeModal}
         >
-          <div 
+          <div
             className="bg-white dark:bg-zinc-900 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative"
             onClick={(e) => e.stopPropagation()}
           >

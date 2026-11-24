@@ -121,6 +121,17 @@ export const Loader: React.FC<LoaderProps> = ({
   const keyframes = variantKeyframes[variant];
   const hourglassBorder = size === "sm" ? 8 : size === "md" ? 12 : size === "lg" ? 16 : 20;
 
+  // Respect prefers-reduced-motion: disable all animations when the user
+  // has requested reduced motion. Fallback: show a static placeholder.
+  const reducedMotionStyle = `
+    @media (prefers-reduced-motion: reduce) {
+      .loader-reduced-motion-off * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  `;
+
   let content: React.ReactNode = null;
 
   switch (variant) {
@@ -1306,8 +1317,11 @@ export const Loader: React.FC<LoaderProps> = ({
 
   return (
     <>
+      <style>{reducedMotionStyle}</style>
       {keyframes ? <style>{keyframes}</style> : null}
-      {content}
+      <div className={`loader-reduced-motion-off ${className}`} role="status" aria-label="Loading">
+        {content}
+      </div>
     </>
   );
 };

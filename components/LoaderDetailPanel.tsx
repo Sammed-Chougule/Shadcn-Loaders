@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Copy, Check, Terminal, Sliders, Laptop, Pencil, X } from 'lucide-react';
 import { LoaderItem } from '../types';
 import { LoaderDisplay } from './LoaderDisplay';
+import { copyToClipboard } from '../lib/utils';
 
 type LoaderDetailPanelProps = {
   loader: LoaderItem;
@@ -20,1133 +21,11 @@ const colorMap = {
   indigo: { name: 'indigo', textClass: 'text-indigo-600 dark:text-indigo-400', bgClass: 'bg-indigo-600 dark:bg-indigo-400', bgBadge: 'bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300', hex: '4f46e5', label: 'Deep Indigo' }
 };
 
-// Manual Component implementation code mappings
-  const rawImplementationCodes: Record<string, string> = {
-  'classic-spinner': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function ClassicSpinner({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <div className={\`\${containerSize} border-2 border-zinc-200 dark:border-zinc-800 border-t-zinc-950 dark:border-t-zinc-50 rounded-full animate-spin \${className}\`} />
-  );
-}`,
-  'dots-pulse': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function DotsPulse({ size = 'md', className = '' }: LoaderProps) {
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`flex gap-1 items-center \${className}\`}>
-      {[0, 1, 2].map((i) => (
-        <div 
-          key={i}
-          className={\`\${size === 'sm' ? 'w-1 h-1' : 'w-2 h-2'} \${primaryBgClass} rounded-full animate-bounce\`} 
-          style={{ animationDelay: \`\${i * 0.15}s\` }}
-        />
-      ))}
-    </div>
-  );
-}`,
-  'pulse-ring': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function PulseRing({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <div className={\`relative \${containerSize} \${className}\`}>
-      <div className="absolute inset-0 border-2 border-zinc-950 dark:border-zinc-50 rounded-full animate-ping opacity-75" />
-      <div className="absolute inset-2 border-2 border-zinc-600 dark:border-zinc-400 rounded-full animate-pulse" />
-    </div>
-  );
-}`,
-  'bars': `import * as React from "react";
-
-type LoaderProps = {
-  className?: string;
-};
-
-export function Bars({ className = '' }: LoaderProps) {
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`flex items-end gap-1 h-8 \${className}\`}>
-      {[0, 1, 2, 3, 4].map((i) => (
-        <div 
-          key={i} 
-          className={\`w-1 \${primaryBgClass} rounded-full animate-[pulse_1s_ease-in-out_infinite]\`}
-          style={{ height: \`\${20 + (i * 15) % 80}%\`, animationDelay: \`\${i * 0.1}s\` }}
-        />
-      ))}
-    </div>
-  );
-}`,
-  'square-spin': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function SquareSpin({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`\${containerSize} \${primaryBgClass} animate-[spin_2s_linear_infinite] rounded-sm shadow-sm \${className}\`} />
-  );
-}`,
-  'double-bounce': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function DoubleBounce({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`relative \${containerSize} \${className}\`}>
-      <div className={\`absolute inset-0 \${primaryBgClass} rounded-full opacity-60 animate-bounce\`} />
-      <div className="absolute inset-0 bg-zinc-400 dark:bg-zinc-600 rounded-full opacity-60 animate-bounce [animation-delay:700ms]" />
-    </div>
-  );
-}`,
-  'circular-progress': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function CircularProgress({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <svg className={\`\${containerSize} animate-spin \${className}\`} viewBox="0 0 50 50">
-      <circle 
-        className="stroke-zinc-950 dark:stroke-zinc-50 fill-none" 
-        cx="25" cy="25" r="20" 
-        strokeWidth="4" 
-        strokeLinecap="round"
-        strokeDasharray="80, 200"
-      />
-    </svg>
-  );
-}`,
-  'wave-loader': `import * as React from "react";
-
-type LoaderProps = {
-  className?: string;
-};
-
-export function WaveLoader({ className = '' }: LoaderProps) {
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`flex gap-0.5 \${className}\`}>
-      {[...Array(10)].map((_, i) => (
-        <div 
-          key={i} 
-          className={\`w-1 h-4 \${primaryBgClass} animate-[pulse_1.5s_infinite]\`} 
-          style={{ animationDelay: \`\${i * 0.1}s\` }}
-        />
-      ))}
-    </div>
-  );
-}`,
-  'skeleton': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Skeleton({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <>
-      <style>
-        {\`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }\`}
-      </style>
-      <div className={\`relative overflow-hidden bg-zinc-100 dark:bg-zinc-900 rounded border border-zinc-200/50 dark:border-zinc-800/50 \${containerSize} \${className}\`}>
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent animate-shimmer -translate-x-full" />
-      </div>
-    </>
-  );
-}`,
-  'glow-pulse': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function GlowPulse({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`\${primaryBgClass} rounded-full shadow-[0_0_20px_rgba(0,0,0,0.15)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] animate-pulse \${containerSize} \${className}\`} />
-  );
-}`,
-  'clock': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Clock({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <div className={\`\${containerSize} border-2 border-zinc-300 dark:border-zinc-700 rounded-full relative \${className}\`}>
-      <div className="absolute top-1/2 left-1/2 w-[40%] h-0.5 bg-zinc-950 dark:bg-zinc-50 origin-left -rotate-90 animate-[spin_2s_linear_infinite]" />
-      <div className="absolute top-1/2 left-1/2 w-[30%] h-0.5 bg-zinc-500 origin-left -rotate-90 animate-[spin_8s_linear_infinite]" />
-    </div>
-  );
-}`,
-  'hourglass': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Hourglass({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <div className={\`\${containerSize} relative animate-[spin_2s_ease-in-out_infinite] \${className}\`}>
-      <div className="absolute inset-0 border-t-[16px] border-t-zinc-950 dark:border-t-zinc-50 border-x-[16px] border-x-transparent border-b-[16px] border-b-transparent rounded-t-full" />
-      <div className="absolute inset-0 border-b-[16px] border-b-zinc-400 dark:border-b-zinc-600 border-x-[16px] border-x-transparent border-t-[16px] border-t-transparent rounded-b-full" />
-    </div>
-  );
-}`,
-  'gear': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Gear({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryColorClass = "text-zinc-950 dark:text-zinc-50";
-  return (
-    <div className={\`\${containerSize} \${primaryColorClass} animate-[spin_3s_linear_infinite] \${className}\`}>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12.22 2h-.44a2 2 0 0 0-2 2 2 2 0 0 1-2 2 2 2 0 0 0-2 2 2 2 0 0 1-2 2 2 2 0 0 0-2 2v.44a2 2 0 0 0 2 2 2 2 0 0 1 2 2 2 2 0 0 0 2 2 2 2 0 0 1 2 2 2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2 2 2 0 0 1 2-2 2 2 0 0 0 2-2 2 2 0 0 1 2-2 2 2 0 0 0 2-2v-.44a2 2 0 0 0-2-2 2 2 0 0 0-2-2 2 2 0 1-2-2 2 2 0 0 0-2-2Z" />
-        <circle cx="12" cy="12" r="3" />
-      </svg>
-    </div>
-  );
-}`,
-  'orbit': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Orbit({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`\${containerSize} relative flex items-center justify-center \${className}\`}>
-      <div className={\`w-2 h-2 \${primaryBgClass} rounded-full\`} />
-      <div className="absolute w-full h-full border border-zinc-200 dark:border-zinc-800 rounded-full animate-spin">
-         <div className={\`absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 \${primaryBgClass} rounded-full\`} />
-      </div>
-    </div>
-  );
-}`,
-  'snake': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Snake({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBorderClass = "border-zinc-950 dark:border-zinc-50";
-  return (
-    <>
-      <style>
-        {\`@keyframes snake { 0%, 100% { clip-path: inset(0 0 95% 0); } 25% { clip-path: inset(0 95% 0 0); } 50% { clip-path: inset(95% 0 0 0); } 75% { clip-path: inset(0 0 0 95%); } }\`}
-      </style>
-      <div className={\`\${containerSize} border-2 border-zinc-100 dark:border-zinc-900 relative rounded-md overflow-hidden \${className}\`}>
-        <div className={\`absolute inset-0 border-2 \${primaryBorderClass} animate-snake\`} />
-      </div>
-    </>
-  );
-}`,
-  'infinity': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Infinity({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryColorClass = "text-zinc-950 dark:text-zinc-50";
-  return (
-    <>
-      <style>
-        {\`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }\`}
-      </style>
-      <div className={\`\${containerSize} \${primaryColorClass} \${className}\`}>
-        <svg viewBox="0 0 100 50" className="w-full h-full">
-          <path 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="4" 
-            strokeDasharray="10 5" 
-            className="animate-[shimmer_2s_linear_infinite]"
-            d="M25,25 C25,10 40,10 50,25 C60,40 75,40 75,25 C75,10 60,10 50,25 C40,40 25,40 25,25" 
-          />
-        </svg>
-      </div>
-    </>
-  );
-}`,
-  'text-shimmer': `import * as React from "react";
-
-type LoaderProps = {
-  className?: string;
-};
-
-export function TextShimmer({ className = '' }: LoaderProps) {
-  return (
-    <>
-      <style>
-        {\`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }\`}
-      </style>
-      <div className={\`text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-400 via-zinc-950 dark:via-zinc-50 to-zinc-400 bg-[length:200%_auto] animate-[shimmer_2s_linear_infinite] \${className}\`}>
-        Loading...
-      </div>
-    </>
-  );
-}`,
-  'grid': `import * as React from "react";
-
-type LoaderProps = {
-  className?: string;
-};
-
-export function Grid({ className = '' }: LoaderProps) {
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`grid grid-cols-3 gap-1 \${className}\`}>
-      {[...Array(9)].map((_, i) => (
-        <div 
-          key={i} 
-          className={\`w-2 h-2 \${primaryBgClass} rounded-sm animate-pulse\`} 
-          style={{ animationDelay: \`\${i * 0.1}s\` }}
-        />
-      ))}
-    </div>
-  );
-}`,
-  'heartbeat': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Heartbeat({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryColorClass = "text-zinc-950 dark:text-zinc-50";
-  return (
-    <div className={\`\${containerSize} \${primaryColorClass} animate-[ping_1.5s_infinite] flex items-center justify-center \${className}\`}>
-      <svg viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-      </svg>
-    </div>
-  );
-}`,
-  'loader-dna': `import * as React from "react";
-
-type LoaderProps = {
-  className?: string;
-};
-
-export function LoaderDna({ className = '' }: LoaderProps) {
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`flex justify-center items-center h-full gap-1 \${className}\`}>
-      {[...Array(5)].map((_, i) => (
-        <div key={i} className="flex flex-col gap-2">
-          <div className={\`w-2 h-2 \${primaryBgClass} rounded-full animate-bounce\`} style={{ animationDelay: \`\${i * 0.1}s\` }} />
-          <div className="w-2 h-2 bg-zinc-300 dark:bg-zinc-700 rounded-full animate-bounce" style={{ animationDelay: \`\${(i * 0.1) + 0.5}s\` }} />
-        </div>
-      ))}
-    </div>
-  );
-}`,
-  'matrix': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Matrix({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <>
-      <style>
-        {\`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }\`}
-      </style>
-      <div className={\`flex flex-col gap-0.5 overflow-hidden \${containerSize} items-center \${className}\`}>
-        {[...Array(4)].map((_, i) => (
-          <div 
-            key={i} 
-            className="w-full h-1 bg-zinc-100 dark:bg-zinc-900 relative"
-          >
-            <div 
-              className={\`absolute top-0 bottom-0 w-4 \${primaryBgClass} shadow-[0_0_10px_rgba(0,0,0,0.1)]\`}
-              style={{ 
-                left: '-20%', 
-                animation: 'shimmer 2s linear infinite',
-                animationDelay: \`\${i * 0.5}s\`
-              }}
-            />
-          </div>
-        ))}
-      </div>
-    </>
-  );
-}`,
-  'floating-bubble': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function FloatingBubble({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`relative overflow-hidden \${containerSize} border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50/50 dark:bg-zinc-900/50 \${className}\`}>
-      {[...Array(5)].map((_, i) => {
-        const width = [6, 10, 8, 5, 11][i];
-        const left = [15, 35, 55, 75, 45][i];
-        const duration = [2.5, 3.8, 2.1, 4.5, 3.2][i];
-        const delay = [0.2, 1.1, 0.5, 1.8, 0.8][i];
-        return (
-          <div 
-            key={i} 
-            className={\`absolute \${primaryBgClass} opacity-30 rounded-full animate-bounce\`}
-            style={{ 
-              width: \`\${width}px\`,
-              height: \`\${width}px\`,
-              left: \`\${left}%\`,
-              bottom: '-20%',
-              animationDuration: \`\${duration}s\`,
-              animationDelay: \`\${delay}s\`
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-}`,
-  'hex-spin': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function HexSpin({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryColorClass = "text-zinc-950 dark:text-zinc-50";
-  return (
-    <div className={\`\${containerSize} \${primaryColorClass} flex items-center justify-center \${className}\`}>
-      <svg viewBox="0 0 100 100" className="w-full h-full animate-[spin_1.6s_linear_infinite]" fill="none" stroke="currentColor" strokeWidth="4">
-        <polygon points="50,10 80,30 80,70 50,90 20,70 20,30" className="stroke-current" />
-      </svg>
-    </div>
-  );
-}`,
-  'concentric-rings': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function ConcentricRings({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <div className={\`relative \${containerSize} flex items-center justify-center \${className}\`}>
-      <div className="absolute inset-0 rounded-full border-2 border-zinc-200 dark:border-zinc-800 animate-ping" />
-      <div className="absolute inset-2 rounded-full border-2 border-zinc-300 dark:border-zinc-700 animate-ping [animation-delay:200ms]" />
-      <div className="absolute inset-4 rounded-full border-2 border-zinc-400 dark:border-zinc-600 animate-pulse [animation-delay:400ms]" />
-    </div>
-  );
-}`,
-  'dots-rotate': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function DotsRotate({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <div className={\`relative \${containerSize} \${className}\`}>
-      <div className="absolute inset-0 flex items-center justify-center animate-[spin_1.2s_linear_infinite]">
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="absolute w-2 h-2 bg-zinc-950 dark:bg-zinc-50 rounded-full"
-            style={{ transform: \`rotate(\${i * 120}deg) translateY(-40%)\` }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}`,
-  'morphing-hex': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function MorphingHex({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <div className={\`\${containerSize} \${className}\`}>
-      <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="4">
-        <style>{\`
-          @keyframes morphHexStandalone {
-            0% { d: path('M50,10 L80,30 L80,70 L50,90 L20,70 L20,30 Z'); transform: rotate(0deg); }
-            25% { d: path('M50,15 L75,35 L75,65 L50,85 L25,65 L25,35 Z'); transform: rotate(90deg); }
-            50% { d: path('M50,10 L80,30 L80,70 L50,90 L20,70 L20,30 Z'); transform: rotate(180deg); }
-            75% { d: path('M50,15 L75,35 L75,65 L50,85 L25,65 L25,35 Z'); transform: rotate(270deg); }
-            100% { d: path('M50,10 L80,30 L80,70 L50,90 L20,70 L20,30 Z'); transform: rotate(360deg); }
-          }
-          .morphing-standalone { animation: morphHexStandalone 3s ease-in-out infinite; }
-        \`}</style>
-        <polygon points="50,10 80,30 80,70 50,90 20,70 20,30" className="morphing-standalone stroke-zinc-950 dark:stroke-zinc-50" />
-      </svg>
-    </div>
-  );
-}`,
-  'ripple-pulse': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function RipplePulse({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`relative \${containerSize} flex items-center justify-center overflow-hidden \${className}\`}>
-      <div className={\`absolute w-2 h-2 \${primaryBgClass} rounded-full\`} />
-      {[0, 1, 2].map((i) => (
-        <div
-          key={i}
-          className="absolute rounded-full border-2 border-zinc-950 dark:border-zinc-50"
-          style={{
-            width: \`\${12 + i * 8}px\`,
-            height: \`\${12 + i * 8}px\`,
-            animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite',
-            animationDelay: \`\${i * 0.4}s\`,
-            opacity: 1 - i * 0.3
-          }}
-        />
-      ))}
-    </div>
-  );
-}`,
-  'orbiting-spheres': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function OrbitingSpheres({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryColorClass = "text-zinc-950 dark:text-zinc-50";
-  return (
-    <div className={\`\${containerSize} \${className}\`}>
-      <style>{\`
-        @keyframes rotateContainer {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        @keyframes orbitMotion {
-          0% { transform: translateX(8px) scale(0.73); opacity: 0.65; }
-          25% { transform: translateX(0%) scale(0.47); opacity: 0.3; }
-          50% { transform: translateX(-8px) scale(0.73); opacity: 0.65; }
-          75% { transform: translateX(0%) scale(1); opacity: 1; }
-          100% { transform: translateX(8px) scale(0.73); opacity: 0.65; }
-        }
-        .orbiting-spheres-container {
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 100%;
-          height: 100%;
-          animation: rotateContainer 2.5s infinite linear;
-        }
-        .orbiting-spheres-dot {
-          position: absolute;
-          width: 35%;
-          height: 35%;
-          border-radius: 50%;
-          background-color: currentColor;
-          animation: orbitMotion 1.5s linear infinite;
-        }
-        .orbiting-spheres-dot:nth-child(2) {
-          animation: orbitMotion 1.5s linear -0.75s infinite;
-        }
-      \`}</style>
-      <div className={\`orbiting-spheres-container \${primaryColorClass}\`}>
-        <div className="orbiting-spheres-dot" />
-        <div className="orbiting-spheres-dot" />
-      </div>
-    </div>
-  );
-}`,
-  'paired-revolution': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function PairedRevolution({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`\${containerSize} relative flex items-center justify-center \${className}\`}>
-      <style>{\`
-        @keyframes twinOrbitRotate {
-          100% {
-            transform: rotate(360deg) translate(155%);
-          }
-        }
-      \`}</style>
-      <div
-        className={\`absolute rounded-full \${primaryBgClass}\`}
-        style={{ width: '25%', height: '25%', zIndex: 10 }}
-      />
-      <div className="absolute w-full h-full">
-        <div
-          className={\`absolute rounded-full \${primaryBgClass}\`}
-          style={{
-            width: '25%',
-            height: '25%',
-            top: '50%',
-            left: '50%',
-            transform: "rotate(0deg) translate(155%)",
-            animation: "twinOrbitRotate 1.4s ease infinite",
-            marginTop: '-12.5%',
-            marginLeft: '-12.5%',
-          }}
-        />
-        <div
-          className={\`absolute rounded-full \${primaryBgClass}\`}
-          style={{
-            width: '25%',
-            height: '25%',
-            top: '50%',
-            left: '50%',
-            transform: "rotate(0deg) translate(155%)",
-            animation: "twinOrbitRotate 1.4s ease infinite",
-            animationDelay: "0.7s",
-            marginTop: '-12.5%',
-            marginLeft: '-12.5%',
-          }}
-        />
-      </div>
-    </div>
-  );
-}`,
-  'eyes-gaze': `import * as React from "react";
-
-type LoaderProps = {
-  className?: string;
-};
-
-export function EyesGaze({ className = '' }: LoaderProps) {
-  return (
-    <div className={\`relative flex items-center justify-center gap-4 \${className}\`}>
-      <style>{\`
-        @keyframes gazeLeftRight {
-          0% { transform: translateX(-6px); }
-          25% { transform: translateX(-6px); }
-          50% { transform: translateX(6px); }
-          75% { transform: translateX(6px); }
-          100% { transform: translateX(-6px); }
-        }
-      \`}</style>
-      <div className="relative w-8 h-8 bg-zinc-950 dark:bg-zinc-50 rounded-full flex items-center justify-center">
-        <div
-          className="w-3 h-3 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center"
-          style={{ animation: "gazeLeftRight 2s ease-in-out infinite" }}
-        >
-          <div className="w-2 h-2 bg-zinc-950 dark:bg-zinc-50 rounded-full" />
-        </div>
-      </div>
-      <div className="relative w-8 h-8 bg-zinc-950 dark:bg-zinc-50 rounded-full flex items-center justify-center">
-        <div
-          className="w-3 h-3 bg-white dark:bg-zinc-900 rounded-full flex items-center justify-center"
-          style={{ animation: "gazeLeftRight 2s ease-in-out infinite" }}
-        >
-          <div className="w-2 h-2 bg-zinc-950 dark:bg-zinc-50 rounded-full" />
-        </div>
-      </div>
-    </div>
-  );
-}`,
-  'atom': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function Atom({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`relative \${containerSize} flex items-center justify-center \${className}\`}>
-      <style>{\`
-        @keyframes atomOrbit {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      \`}</style>
-      <div className={\`absolute z-10 w-1/5 h-1/5 rounded-full \${primaryBgClass}\`} />
-      {[0, 60, 120].map((rot, i) => (
-        <div
-          key={rot}
-          className="absolute inset-0"
-          style={{
-            transform: \`rotate(\${rot}deg)\`,
-            animation: \`atomOrbit \${2 + i * 0.5}s linear infinite\`,
-            animationDelay: \`\${i * -0.8}s\`,
-          }}
-        >
-          <div className="absolute top-1/2 left-1/2 w-full h-2/5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-zinc-950/40 dark:border-zinc-50/40" />
-          <div className={\`absolute top-1/2 left-0 w-1/5 h-1/5 -translate-y-1/2 -translate-x-1/2 rounded-full \${primaryBgClass}\`} />
-        </div>
-      ))}
-    </div>
-  );
-}`,
-  'solar-system': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function SolarSystem({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`relative \${containerSize} flex items-center justify-center \${className}\`}>
-      <style>{\`
-        @keyframes solarSpin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      \`}</style>
-      <div className={\`absolute z-10 w-[16%] h-[16%] rounded-full \${primaryBgClass}\`} />
-      {[
-        { inset: '8%', speed: 3.5, delay: 0 },
-        { inset: '20%', speed: 2.6, delay: -1.3 },
-        { inset: '32%', speed: 5.4, delay: -0.4 },
-      ].map((ring, i) => (
-        <div
-          key={i}
-          className="absolute rounded-full border border-zinc-950/30 dark:border-zinc-50/30"
-          style={{
-            inset: ring.inset,
-            animation: \`solarSpin \${ring.speed}s linear infinite\`,
-            animationDelay: \`\${ring.delay}s\`,
-          }}
-        >
-          <div
-            className={\`absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full \${i === 1 ? 'bg-zinc-400 dark:bg-zinc-600' : primaryBgClass}\`}
-            style={{ width: \`\${[9, 6, 7][i]}%\`, height: \`\${[9, 6, 7][i]}%\` }}
-          />
-        </div>
-      ))}
-    </div>
-  );
-}`,
-  'radar-sweep': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function RadarSweep({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`relative overflow-hidden rounded-full border border-zinc-950/30 dark:border-zinc-50/30 \${containerSize} text-zinc-950 dark:text-zinc-50 \${className}\`}>
-      <style>{\`
-        @keyframes radarSpin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      \`}</style>
-      <div className="absolute rounded-full border border-zinc-950/20 dark:border-zinc-50/20" style={{ inset: '22%' }} />
-      <div className="absolute rounded-full border border-zinc-950/15 dark:border-zinc-50/15" style={{ inset: '42%' }} />
-      <div className="absolute top-1/2 left-0 right-0 h-px bg-zinc-950/15 dark:bg-zinc-50/15" />
-      <div className="absolute top-0 bottom-0 left-1/2 w-px bg-zinc-950/15 dark:bg-zinc-50/15" />
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background: 'conic-gradient(from 0deg, currentColor 0deg, transparent 62deg)',
-          animation: 'radarSpin 1.8s linear infinite',
-          opacity: 0.5,
-        }}
-      />
-      <div className={\`absolute w-[12%] h-[12%] rounded-full \${primaryBgClass} animate-ping\`} style={{ left: '68%', top: '58%', opacity: 0.9 }} />
-      <div className={\`absolute w-[8%] h-[8%] rounded-full \${primaryBgClass} animate-ping\`} style={{ left: '26%', top: '30%', opacity: 0.7, animationDelay: '0.6s' }} />
-    </div>
-  );
-}`,
-  'blocks-wave': `import * as React from "react";
-
-type LoaderProps = {
-  className?: string;
-};
-
-export function BlocksWave({ className = '' }: LoaderProps) {
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`flex items-end gap-1 h-8 \${className}\`}>
-      <style>{\`
-        @keyframes waveBob {
-          0%, 100% { transform: scaleY(0.35); }
-          50% { transform: scaleY(1); }
-        }
-      \`}</style>
-      {[0, 1, 2, 3, 4].map((i) => (
-        <div
-          key={i}
-          className={\`w-3 \${primaryBgClass} rounded-sm\`}
-          style={{
-            height: \`\${[34, 65, 100, 65, 34][i]}%\`,
-            transformOrigin: 'bottom',
-            animation: \`waveBob 1.1s ease-in-out infinite\`,
-            animationDelay: \`\${i * 0.12}s\`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}`,
-  'coffee-cup': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function CoffeeCup({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <div className={\`relative flex items-center justify-center \${containerSize} text-zinc-950 dark:text-zinc-50 \${className}\`}>
-      <style>{\`
-        @keyframes steam {
-          0% { transform: translateY(0) translateX(0) scaleX(1); opacity: 0; }
-          30% { opacity: 0.9; }
-          100% { transform: translateY(-200%) translateX(45%) scaleX(1.4); opacity: 0; }
-        }
-      \`}</style>
-      <div className="absolute flex gap-[10%]" style={{ bottom: '56%', width: '42%', height: '16%' }}>
-        {[0, 1, 2].map((i) => (
-          <div
-            key={i}
-            className="w-[16%] h-full rounded-full bg-current"
-            style={{ animation: \`steam \${1.6 + i * 0.3}s ease-in-out infinite\`, animationDelay: \`\${i * 0.45}s\`, marginTop: i === 1 ? '-24%' : 0 }}
-          />
-        ))}
-      </div>
-      <div className="relative" style={{ width: '58%', height: '40%' }}>
-        <div className="absolute bottom-0 rounded-b-md border-[3px] border-current" style={{ left: '6%', width: '70%', height: '100%', borderTop: 'none' }} />
-        <div className="absolute bottom-[12%] rounded-r-full border-[3px] border-current" style={{ right: '0%', width: '24%', height: '26%' }} />
-        <div className="absolute bottom-0 bg-current opacity-35" style={{ left: '6%', width: '70%', height: '16%', borderRadius: '0 0 5px 5px' }} />
-      </div>
-    </div>
-  );
-}`,
-  'progress-slider': `import * as React from "react";
-
-type LoaderProps = {
-  className?: string;
-};
-
-export function ProgressSlider({ className = '' }: LoaderProps) {
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`relative w-24 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800 \${className}\`}>
-      <style>{\`
-        @keyframes slide {
-          0% { transform: translateX(-110%); }
-          100% { transform: translateX(260%); }
-        }
-      \`}</style>
-      <div className={\`absolute top-0 bottom-0 w-1/3 rounded-full \${primaryBgClass}\`} style={{ animation: 'slide 1.4s ease-in-out infinite' }} />
-    </div>
-  );
-}`,
-  'flower-spin': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function FlowerSpin({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  return (
-    <svg
-      viewBox="0 0 64 64"
-      className={\`\${containerSize} text-zinc-950 dark:text-zinc-50 \${className}\`}
-      fill="currentColor"
-      style={{
-        transformBox: 'fill-box',
-        transformOrigin: 'center',
-        animation: 'bloom 2.4s ease-in-out infinite',
-      }}
-    >
-      <style>{\`
-        @keyframes bloom {
-          0%, 100% { transform: scale(0.85) rotate(0deg); }
-          50% { transform: scale(1.05) rotate(180deg); }
-        }
-        @keyframes petal {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 1; }
-        }
-      \`}</style>
-      {[0, 60, 120, 180, 240, 300].map((a, i) => (
-        <circle
-          key={a}
-          cx="32"
-          cy="24"
-          r="12"
-          transform={\`rotate(\${a} 32 32)\`}
-          style={{ animation: \`petal 1.2s ease-in-out \${i * 0.15}s infinite\` }}
-        />
-      ))}
-      <circle cx="32" cy="32" r="5" fill="none" stroke="currentColor" strokeWidth="2.5" />
-    </svg>
-  );
-}`,
-  'pulse-wave': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function PulseWave({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`\${containerSize} relative flex items-center justify-center \${className}\`}>
-      <style>{\`
-        @keyframes pulseWaveExpand {
-          0% { transform: scale(0.5); opacity: 1; }
-          100% { transform: scale(2); opacity: 0; }
-        }
-      \`}</style>
-      {[0, 1, 2].map((i) => (
-        <div
-          key={i}
-          className="absolute inset-0 rounded-full border-2 border-zinc-950 dark:border-zinc-50"
-          style={{
-            animation: 'pulseWaveExpand 1.5s ease-out infinite',
-            animationDelay: \`\${i * 0.5}s\`,
-          }}
-        />
-      ))}
-      <div className={\`w-1/4 h-1/4 rounded-full \${primaryBgClass}\`} />
-    </div>
-  );
-}`,
-  'bouncing-ball': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function BouncingBall({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`\${containerSize} relative flex items-end justify-center pb-1 \${className}\`}>
-      <style>{\`
-        @keyframes bounceBall {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-80%); }
-        }
-      \`}</style>
-      <div
-        className={\`w-1/4 h-1/4 rounded-full \${primaryBgClass}\`}
-        style={{ animation: 'bounceBall 0.6s ease-in-out infinite' }}
-      />
-      <div className="absolute bottom-1 w-1/2 h-0.5 bg-zinc-200 dark:bg-zinc-800 rounded-full" />
-    </div>
-  );
-}`,
-  'dna-helix': `import * as React from "react";
-
-type LoaderProps = {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  className?: string;
-};
-
-export function DnaHelix({ size = 'md', className = '' }: LoaderProps) {
-  const sizeClasses = { sm: 'w-4 h-4', md: 'w-8 h-8', lg: 'w-12 h-12', xl: 'w-16 h-16' };
-  const containerSize = sizeClasses[size] || sizeClasses.md;
-  const primaryBgClass = "bg-zinc-950 dark:bg-zinc-50";
-  return (
-    <div className={\`\${containerSize} relative flex items-center justify-center \${className}\`}>
-      <style>{\`
-        @keyframes dnaRotate {
-          0% { transform: rotateY(0deg); }
-          100% { transform: rotateY(360deg); }
-        }
-      \`}</style>
-      <div className="relative w-full h-full" style={{ animation: 'dnaRotate 2s linear infinite', transformStyle: 'preserve-3d' }}>
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div
-            key={i}
-            className={\`absolute w-2 h-2 rounded-full \${primaryBgClass}\`}
-            style={{
-              top: \`\${10 + i * 20}%\`,
-              left: \`\${50 + Math.sin(i * 1.2) * 30}%\`,
-              transform: \`translateX(-50%)\`,
-            }}
-          />
-        ))}
-        {[0, 1, 2, 3, 4].map((i) => (
-          <div
-            key={\`b-\${i}\`}
-            className="absolute w-2 h-2 rounded-full bg-zinc-300 dark:bg-zinc-700"
-            style={{
-              top: \`\${10 + i * 20}%\`,
-              left: \`\${50 - Math.sin(i * 1.2) * 30}%\`,
-              transform: \`translateX(-50%)\`,
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}`,
-};
-
 const pascalNameFor = (variant: string) =>
   variant
     .split("-")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join("");
-
-const buildCustomizedCode = (
-  variant: string,
-  size: SizingOption,
-  color: ColorOption
-): string => {
-  const pascalName = pascalNameFor(variant);
-  let baseCode = rawImplementationCodes[variant] || `import * as React from "react";
-import { Loader } from "./loader";
-
-export function ${pascalName}(props: React.ComponentProps<typeof Loader>) {
-  return <Loader {...props} variant="${variant}" />;
-}`;
-
-  // Dynamic Sizing Replacement
-  baseCode = baseCode.replace(/size = 'md'/g, `size = '${size}'`);
-
-  // Dynamic Color Replacement
-  if (color !== 'neutral') {
-    const activeColor = colorMap[color];
-    // Target multiple standard black-accent class pairs
-    baseCode = baseCode.replace(/bg-zinc-900/g, `bg-${activeColor.name}-500`);
-    baseCode = baseCode.replace(/bg-zinc-950/g, `bg-${activeColor.name}-600`);
-    baseCode = baseCode.replace(/dark:bg-zinc-50/g, `dark:bg-${activeColor.name}-400`);
-
-    baseCode = baseCode.replace(/text-zinc-900/g, `text-${activeColor.name}-500`);
-    baseCode = baseCode.replace(/text-zinc-950/g, `text-${activeColor.name}-600`);
-    baseCode = baseCode.replace(/dark:text-zinc-50/g, `dark:text-${activeColor.name}-400`);
-
-    baseCode = baseCode.replace(/border-zinc-950/g, `border-${activeColor.name}-600`);
-    baseCode = baseCode.replace(/dark:border-zinc-50/g, `dark:border-${activeColor.name}-400`);
-
-    baseCode = baseCode.replace(/border-t-zinc-950/g, `border-t-${activeColor.name}-600`);
-    baseCode = baseCode.replace(/dark:border-t-zinc-50/g, `dark:border-t-${activeColor.name}-400`);
-
-    baseCode = baseCode.replace(/stroke-zinc-950/g, `stroke-${activeColor.name}-600`);
-    baseCode = baseCode.replace(/dark:stroke-zinc-50/g, `dark:stroke-${activeColor.name}-400`);
-  }
-
-  return baseCode;
-};
 
 export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) => {
   const [size, setSize] = useState<SizingOption>('lg');
@@ -1157,57 +36,49 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
   const [editCode, setEditCode] = useState('');
 
   const triggerCopy = async (text: string) => {
-    if (navigator.clipboard && window.isSecureContext) {
-      try { await navigator.clipboard.writeText(text); } catch { /* fallback below */ }
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch { /* noop */ }
-      document.body.removeChild(ta);
-    }
-    setCopied(true);
+    const ok = await copyToClipboard(text);
+    setCopied(ok);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const activeColor = colorMap[color];
+  const pascalName = pascalNameFor(loader.variant);
   const cssNamespace = `arena-panel-${loader.variant}`;
 
   // Custom live CSS injection matching custom options
   const arenaStyleMarkup = useMemo(() => `
-    .${cssNamespace} .bg-zinc-900, 
+    .${cssNamespace} .bg-zinc-900,
     .${cssNamespace} .bg-zinc-950,
-    .${cssNamespace} .dark\\:bg-zinc-50 { 
-      background-color: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important; 
+    .${cssNamespace} .dark\\:bg-zinc-50 {
+      background-color: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important;
     }
-    .${cssNamespace} .text-zinc-900, 
+    .${cssNamespace} .text-zinc-900,
     .${cssNamespace} .text-zinc-950,
-    .${cssNamespace} .dark\\:text-zinc-50 { 
-      color: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important; 
+    .${cssNamespace} .dark\\:text-zinc-50 {
+      color: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important;
     }
-    .${cssNamespace} .border-zinc-950, 
-    .${cssNamespace} .dark\\:border-zinc-50 { 
-      border-color: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important; 
+    .${cssNamespace} .border-zinc-950,
+    .${cssNamespace} .dark\\:border-zinc-50 {
+      border-color: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important;
     }
-    .${cssNamespace} .border-t-zinc-950, 
-    .${cssNamespace} .dark\\:border-t-zinc-50 { 
-      border-top-color: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important; 
+    .${cssNamespace} .border-t-zinc-950,
+    .${cssNamespace} .dark\\:border-t-zinc-50 {
+      border-top-color: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important;
     }
-    .${cssNamespace} .stroke-zinc-950, 
-    .${cssNamespace} .dark\\:stroke-zinc-50 { 
-      stroke: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important; 
+    .${cssNamespace} .stroke-zinc-950,
+    .${cssNamespace} .dark\\:stroke-zinc-50 {
+      stroke: ${color === 'neutral' ? '' : `#${activeColor.hex}`} !important;
     }
     ${speed === 'slow' ? `.${cssNamespace} * { animation-duration: 2.2s !important; }` : ''}
     ${speed === 'fast' ? `.${cssNamespace} * { animation-duration: 0.45s !important; }` : ''}
   `, [cssNamespace, color, speed, activeColor]);
 
-  const unifiedCode = useMemo(
-    () => buildCustomizedCode(loader.variant, size, color),
-    [loader.variant, size, color]
-  );
+  // Clean usage snippet sourced from the canonical registry component
+  const usageCode = useMemo(() => `import { Loader } from "@/components/ui/loader";
+
+export function ${pascalName}({ size = "${size}", className = "" } = {}) {
+  return <Loader variant="${loader.variant}" size={size} className={className} />;
+}`, [loader.variant, pascalName, size]);
 
   return (
     <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl overflow-hidden shadow-sm flex flex-col h-full">
@@ -1227,21 +98,23 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
         <h3 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 mt-1 flex items-center gap-2">
           {loader.name}
         </h3>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+          {loader.description}
+        </p>
       </div>
 
       <div className="p-6 space-y-6 flex-1 flex flex-col justify-between">
-        
         {/* Live Playground & Customize Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
-          {/* Left: Live Playground (Wider and responsive height) */}
+          {/* Left: Live Playground */}
           <div className="sm:col-span-5 relative bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800/80 rounded-2xl flex flex-col items-center justify-center overflow-hidden shadow-inner min-h-[160px] sm:h-auto">
             <div className="absolute top-3 left-3 text-[10px] text-zinc-400 dark:text-zinc-500 font-semibold flex items-center gap-1 select-none pointer-events-none uppercase tracking-wider">
               <Laptop className="w-3.5 h-3.5 text-zinc-300 dark:text-zinc-700 animate-pulse" /> Play
             </div>
-            
+
             {/* Dynamically Styled Wrapper */}
             <div className={`${cssNamespace} scale-125 sm:scale-135 transition-transform duration-300 ${activeColor.textClass}`}>
-              <LoaderDisplay variant={loader.variant} size={size} />
+              <LoaderDisplay variant={loader.variant} size={size} color={color} />
             </div>
 
             <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-white/85 dark:bg-zinc-900/80 px-2 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-800 shadow-sm text-[9px] font-medium text-zinc-400 dark:text-zinc-500 select-none">
@@ -1271,8 +144,8 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
                     key={sz}
                     onClick={() => setSize(sz)}
                     className={`py-0.5 text-[10px] font-semibold rounded-md transition-all uppercase ${
-                      size === sz 
-                        ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 shadow-sm border border-zinc-200/50 dark:border-transparent' 
+                      size === sz
+                        ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 shadow-sm border border-zinc-200/50 dark:border-transparent'
                         : 'text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100'
                     }`}
                   >
@@ -1291,16 +164,16 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
               <div className="flex gap-1.5 items-center bg-zinc-100/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-lg p-1.5 overflow-x-auto custom-scrollbar">
                 {(Object.keys(colorMap) as ColorOption[]).map((col) => {
                   const colorDef = colorMap[col];
-                  const swatchBackground = col === 'neutral' 
-                    ? 'bg-zinc-900 dark:bg-zinc-50' 
+                  const swatchBackground = col === 'neutral'
+                    ? 'bg-zinc-900 dark:bg-zinc-50'
                     : `bg-${colorDef.name}-500`;
                   return (
                     <button
                       key={col}
                       onClick={() => setColor(col)}
                       className={`w-5 h-5 rounded-full flex items-center justify-center transition-all relative shrink-0 ${swatchBackground} ${
-                        color === col 
-                          ? 'ring-2 ring-offset-2 ring-zinc-400 dark:ring-offset-zinc-950 scale-105' 
+                        color === col
+                          ? 'ring-2 ring-offset-2 ring-zinc-400 dark:ring-offset-zinc-950 scale-105'
                           : 'hover:scale-105 active:scale-95'
                       }`}
                       title={colorDef.label}
@@ -1326,8 +199,8 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
                     key={spd}
                     onClick={() => setSpeed(spd)}
                     className={`py-0.5 text-[10px] font-semibold rounded-md transition-all capitalize ${
-                      speed === spd 
-                        ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 shadow-sm border border-zinc-200/50 dark:border-transparent' 
+                      speed === spd
+                        ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 shadow-sm border border-zinc-200/50 dark:border-transparent'
                         : 'text-zinc-700 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100'
                     }`}
                   >
@@ -1339,7 +212,7 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
           </div>
         </div>
 
-        {/* Unified Code block (CLI/Manual tabs + copy snippet) */}
+        {/* Code block (usage snippet + copy) */}
         <div className="border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden bg-zinc-50 dark:bg-zinc-900 flex flex-col h-[320px] sm:h-[380px] lg:h-[440px] xl:h-[480px] mt-4 shadow-sm text-zinc-800 dark:text-zinc-200">
           {/* Terminal Code Header */}
           <div className="px-4 py-2.5 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-100/50 dark:bg-zinc-900/40 flex items-center gap-2 shrink-0">
@@ -1354,7 +227,7 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
           {/* Code Area Workspace */}
           <div className="flex-1 p-4 overflow-auto font-mono text-[11px] sm:text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed pr-2 select-text bg-white dark:bg-zinc-950/40 scrollbar-thin">
             <pre className="whitespace-pre">
-              <code>{unifiedCode}</code>
+              <code>{usageCode}</code>
             </pre>
           </div>
 
@@ -1363,11 +236,11 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
             <span className="text-[9px] text-zinc-400 dark:text-zinc-500 tracking-wide font-mono italic">
               Ready to copy to project
             </span>
-            
+
             <div className="flex items-center gap-2">
               <button
                 onClick={() => {
-                  setEditCode(unifiedCode);
+                  setEditCode(usageCode);
                   setIsEditOpen(true);
                 }}
                 className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-amber-100 dark:bg-amber-900/40 hover:bg-amber-200 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-700 transition-all active:scale-95 shadow-sm cursor-pointer select-none"
@@ -1378,7 +251,7 @@ export const LoaderDetailPanel: React.FC<LoaderDetailPanelProps> = ({ loader }) 
               </button>
 
               <button
-                onClick={() => triggerCopy(unifiedCode)}
+                onClick={() => triggerCopy(usageCode)}
                 className="flex items-center justify-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-50 border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-all active:scale-95 shadow-sm cursor-pointer select-none"
               >
                 {copied ? (

@@ -6,6 +6,7 @@ import LoaderGrid from './components/LoaderGrid.tsx';
 import { LoaderDisplay } from './components/LoaderDisplay.tsx';
 import { Terminal } from './components/ui/terminal';
 import { LOADERS } from './constants.tsx';
+import { copyToClipboard } from './lib/utils.ts';
 
 const scrollToSection = (id: string) => {
   const element = document.getElementById(id);
@@ -149,7 +150,22 @@ const Hero = React.memo(({ stars, copiedCli, onCopyCli }: HeroProps) => (
 
     {/* Moving loader showcase */}
     <div className="mt-16 -mx-6 px-6 overflow-visible" aria-label="Loader preview">
-      <div className="flex gap-16 items-center animate-marquee whitespace-nowrap py-4">
+      <div
+        className="flex gap-16 items-center animate-marquee whitespace-nowrap py-4"
+        onMouseEnter={(e) => {
+          const el = e.currentTarget;
+          el.style.animationPlayState = "paused";
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget;
+          el.style.animationPlayState = "running";
+        }}
+      >
+        <style>{`
+          @media (prefers-reduced-motion: reduce) {
+            .animate-marquee { animation: none !important; }
+          }
+        `}</style>
         {[...LOADERS, ...LOADERS].map((loader, i) => (
           <div 
             key={`${loader.variant}-${i}`}
@@ -244,19 +260,8 @@ const App: React.FC = () => {
   }, []);
 
   const copyCliCommand = useCallback(async () => {
-    if (navigator.clipboard && window.isSecureContext) {
-      try { await navigator.clipboard.writeText('npx shadcn add @shadcnloaders/loader'); } catch { /* fallback */ }
-    } else {
-      const ta = document.createElement('textarea');
-      ta.value = 'npx shadcn add @shadcnloaders/loader';
-      ta.style.position = 'fixed';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch { /* noop */ }
-      document.body.removeChild(ta);
-    }
-    setCopiedCli(true);
+    const ok = await copyToClipboard('npx shadcn add @shadcnloaders/loader');
+    setCopiedCli(ok);
     setTimeout(() => setCopiedCli(false), 2000);
   }, []);
 
